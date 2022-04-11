@@ -1,6 +1,6 @@
 import jwt
-import json
 import uuid
+import json
 from flask import Flask, request, Response, jsonify, make_response
 from datetime import datetime, timedelta
 from functools import wraps
@@ -78,7 +78,9 @@ def login():
     if not check_password_hash(user[0].password, form_data.get('password')):
         return make_response('Could not verify', 403, {'WWW-Authenticate': 'Basic realm ="Wrong Password!"'})
     # generates the JWT Token
-    token = jwt.encode({'public_id': user[0].public_id, 'exp': datetime.utcnow() + timedelta(minutes=30)}, app.config['SECRET_KEY'])
+    token = jwt.encode({'public_id': user[0].public_id, 
+                        'exp': datetime.utcnow() + timedelta(minutes=30)}, 
+                        app.config['SECRET_KEY'])
     return make_response(jsonify({'token': token.decode('UTF-8')}), 201)
 
 def token_required(f):

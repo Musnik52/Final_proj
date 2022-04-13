@@ -1,16 +1,16 @@
 import time
 import json
 import threading
-from db_files.db_repo import DbRepo
-from db_files.db_config import local_session, config
-from db_files.db_data_object import DbDataObject
-from db_files.db_rabbit_producer import DbRabbitProducer
 from kivy.app import App
 from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
 from kivy.lang.builder import Builder
 from kivy.uix.progressbar import ProgressBar
+from db_files.db_repo import DbRepo
+from db_files.db_config import local_session, config
+from db_files.db_data_object import DbDataObject
+from db_files.db_rabbit_producer import DbRabbitProducer
 
 class myThread(threading.Thread):
     

@@ -1,6 +1,7 @@
 from db_files.db_config import Base
 from sqlalchemy import Column, BigInteger, Text
 
+
 class UserRoles(Base):
     __tablename__ = 'user_roles'
 

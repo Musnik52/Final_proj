@@ -3,8 +3,9 @@ import threading
 from db_files.db_repo import DbRepo
 from db_files.db_config import local_session, config
 
+
 class DbRepoConnectionPool(object):
-    
+
     _instance = None
     _lock = threading.Lock()
     _lock_pool = threading.Lock()
@@ -15,11 +16,13 @@ class DbRepoConnectionPool(object):
 
     @classmethod
     def get_instance(cls):
-        if cls._instance: return cls._instance
+        if cls._instance:
+            return cls._instance
         with cls._lock:
             if cls._instance is None:
                 cls._instance = cls.__new__(cls)
-                cls._instance.connections = [DbRepo(local_session) for i in range(cls._max_connections)]
+                cls._instance.connections = [
+                    DbRepo(local_session) for i in range(cls._max_connections)]
             return cls._instance
 
     def get_free_count(self):
@@ -29,12 +32,14 @@ class DbRepoConnectionPool(object):
         return cls._max_connections
 
     def get_connection(self):
-       while True:
+        while True:
             if len(self.connections) == 0:
                 time.sleep(1/2)
                 continue
             with self._lock_pool:
-                if len(self.connections) > 0: return self.connections.pop(0)
+                if len(self.connections) > 0:
+                    return self.connections.pop(0)
 
     def return_connection(self, conn):
-        with self._lock_pool: self.connections.append(conn)
+        with self._lock_pool:
+            self.connections.append(conn)

@@ -1,10 +1,12 @@
 import pika
 
+
 class DbRabbitProducer:
 
     def __init__(self, queue_name):
         self.queue_name = queue_name
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+        self.connection = pika.BlockingConnection(
+            pika.ConnectionParameters('localhost'))
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue=self.queue_name)
 

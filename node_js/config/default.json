@@ -1,0 +1,17 @@
+{
+    "db_conn": {
+        "client": "pg",
+        "version": "14",
+        "host": "127.0.0.1",
+        "port": 5432,
+        "user": "postgres",
+        "password": "admin",
+        "database": "Airlock"
+    },
+
+    "logger": { 
+        "console_level": "info",
+        "file_level": "debug",
+        "file_name": "Airlock-logs.log"
+    }
+}

@@ -1,12 +1,15 @@
 
-# Project Airlock - Travel & Flights Hub
+# 🛫Project Airlock🛬 - Travel & Flights Hub
 
-Here is my final project for the 
+This is my final project for the 
 John Bryce Full-Stack Develepor's 
 diploma requirement.
 *IMPORTANT*:
 Make sure to check and meet the 
 requirements before initiating the project.
+This is a website where clients, airport companies
+and administrators can log-in and perform various actions, such as purchasing a flight ticket, 
+updating information, create new users, change flight info & more!
 ## 🧬Project's DNA 
 
 - _Back-end:_

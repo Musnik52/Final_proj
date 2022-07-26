@@ -44,7 +44,9 @@ updating information, create new users, change flight info & more!
     My fiancé, Shachar - for believing in me and
     pushing me not to give up & keep learning new things.
 ## 🚀 About Me
-I'm a full-stack developer, mainly code in python 3.x & node.js.
-I enjoy automation and games.   
+I'm a full-stack developer 🧑‍💻 
+My stack is:
+Python 🐍, Node.js 🟢, React.js ⚛, HTML5, CSS3, JavaScript 🕸
+SQL & NoSQL 🐘🍃, Microservices 🐰, Docker 🐳, REST APIs 🖥
 *Beauty is in the eye of the coder.*
 

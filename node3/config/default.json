@@ -16,7 +16,7 @@
   },
 
   "mongo": {
-    "conn_str": "mongodb+srv://admin:admin@cluster0.ougwlzb.mongodb.net/node-auth"
+    "conn_str": "mongodb+srv://admin:admin@cluster0.ougwlzb.mongodb.net/airlock-userAuth"
   },
 
   "ports": {

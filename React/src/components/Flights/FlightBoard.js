@@ -1,10 +1,21 @@
 import React from "react";
 // import TimeFilter from "./TimeFilter";
-const FlightBoard = ({ list, colNames }) => {
+const FlightBoard = (props) => {
+  const colNames = [
+    "id",
+    "airline",
+    "origin country",
+    "destination country",
+    "departure time",
+    "landing time",
+    "remaining tickets",
+  ];
+
   return (
     <div style={{ width: "100%", boxShadow: "3px 6px 3px #cccd" }}>
-      {list.length > 0 && (
+      {props.list.length > 0 && (
         <table
+          className="table table-striped"
           cellSpacing="0"
           style={{ width: "100%", heigth: "auto", padding: "5px 10px" }}
         >
@@ -16,7 +27,7 @@ const FlightBoard = ({ list, colNames }) => {
             </tr>
           </thead>
           <tbody>
-            {Object.values(list).map((obj, index) => (
+            {Object.values(props.list).map((obj, index) => (
               <tr key={index}>
                 {Object.values(obj).map((value, index2) => (
                   <td key={index2}>{value}</td>

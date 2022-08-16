@@ -1,8 +1,8 @@
 import json
 import uuid
+import bcrypt
 from datetime import datetime
 from sqlalchemy import asc
-from werkzeug.security import generate_password_hash
 from db_files.logger import Logger
 from db_files.db_config import create_all_entities, config
 from tables.users import Users
@@ -117,21 +117,27 @@ class DbRepo:
         for i in data:
             self.add(Countries(name=i['name']))
         countries.close()
+        salt = bcrypt.gensalt()
         self.add_all([UserRoles(role_name=config['user_roles']['1']),
                       UserRoles(role_name=config['user_roles']['2']),
                       UserRoles(role_name=config['user_roles']['3'])])
-        self.add_all([Users(username='b0r1s', password=generate_password_hash('boris1992'), email='boris@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['airline']),
-                      Users(username='m4x1m', password=generate_password_hash(
-                            '2themax'), email='max@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['airline']),
-                      Users(username='l10r', password=generate_password_hash(
-                            'lior1999'), email='lior@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['admin']),
-                      Users(username='sh4ch4r', password=generate_password_hash(
-                          '18031991'), email='shachar@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['admin']),
-                      Users(username='k0st4', password=generate_password_hash(
-                            '1kosta1'), email='kosta@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['customer']),
-                      Users(username='3m1l', password=generate_password_hash('e0m1i2l'), email='emil@jb.com',
+        self.add_all([Users(username='b0r1s',
+                            password=bcrypt.hashpw('boris1992'.encode(
+                                'utf8'), salt).decode('utf8'),
+                            email='boris@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['airline']),
+                      Users(username='m4x1m',
+                            password=bcrypt.hashpw('2themax'.encode('utf8'), salt).decode('utf8'), email='max@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['airline']),
+                      Users(username='l10r',
+                            password=bcrypt.hashpw('lior1999'.encode('utf8'), salt).decode('utf8'), email='lior@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['admin']),
+                      Users(username='sh4ch4r',
+                            password=bcrypt.hashpw('18031991'.encode('utf8'), salt).decode('utf8'), email='shachar@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['admin']),
+                      Users(username='k0st4',
+                            password=bcrypt.hashpw('1kosta1'.encode('utf8'), salt).decode('utf8'), email='kosta@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['customer']),
+                      Users(username='3m1l',
+                            password=bcrypt.hashpw('e0m1i2l'.encode('utf8'), salt).decode('utf8'), email='emil@jb.com',
                             public_id=str(uuid.uuid4()), user_role=config['user_roles']['customer']),
-                      Users(username='y4h4v', password=generate_password_hash('y4h4av5ch'), email='yahav@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['customer'])])
+                      Users(username='y4h4v',
+                            password=bcrypt.hashpw('y4h4av5ch'.encode('utf8'), salt).decode('utf8'), email='yahav@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['customer'])])
         self.add_all([AirlineCompanies(name='bazooka air', country_id=1, user_id=1),
                       AirlineCompanies(name='sky high', country_id=2, user_id=2)])
         self.add_all([Administrators(first_name='lior', last_name='musnik', user_id=3),

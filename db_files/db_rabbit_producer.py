@@ -8,10 +8,10 @@ class DbRabbitProducer:
         self.connection = pika.BlockingConnection(
             pika.ConnectionParameters('localhost'))
         self.channel = self.connection.channel()
-        self.channel.queue_declare(queue=self.queue_name)
+        self.channel.queue_declare(queue=self.queue_name, durable=True)
 
     def publish(self, data):
-        self.channel.queue_declare(queue=self.queue_name)
+        self.channel.queue_declare(queue=self.queue_name, durable=True)
         self.channel.basic_publish(exchange='',
                                    routing_key=self.queue_name,
                                    body=data)

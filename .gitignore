@@ -1,0 +1,10 @@
+node_js/**
+node_modules
+package-lock.json
+project_part1.pdf
+project_part2.pdf
+project_part3.pdf
+project_part4a.pdf
+project_part4b.pdf
+web_cors_bs.pdf
+web_session_proj.pdf

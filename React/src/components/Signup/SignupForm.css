@@ -1,14 +1,15 @@
 .new-customer__controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  text-align: left;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 1rem !important;
+  margin-bottom: flex !important;
+  text-align: left !important;
 }
 
 .new-customer__control label {
-  font-weight: bold;
-  flex: 0.5;
-  color: #464646;
-  margin-bottom: 0.5rem
+  font-weight: bold !important;
+  flex: 0.5 !important;
+  color: #464646 !important;
+  margin-bottom: 0.7rem !important;
 }
+

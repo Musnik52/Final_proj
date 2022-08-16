@@ -1,26 +1,32 @@
 import SignupForm from "./SignupForm";
 import Card from "../UI/Card/Card";
-import "./Signup.css"
+import axios from "axios";
+import "./Signup.css";
+const uuid = require("uuid");
 
 const Signup = (props) => {
-  const saveCustomerDataHandler = (enteredCustomerData) => {
-    const customerData = {
+  const saveCustomerDataHandler = async (enteredCustomerData) => {
+    const dataCustomer = {
       ...enteredCustomerData,
+      publivId: uuid.v4(),
+      user_role: "customer",
     };
-    console.log(customerData)
-    // RABBITMQ HERE TO ADD CUSTOMER
+    console.log(dataCustomer);
+    axios
+      .post("http://localhost:8080/", dataCustomer)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
-    <div>
-      <div className="container">
-        <h4 className="center">Signup</h4>
-        <Card className="signup">
-          <SignupForm
-            onSaveCustomerData={saveCustomerDataHandler}
-          />
-        </Card>
-      </div>
+    <div className="mb-3">
+      <br />
+      <h3>Signup</h3>
+      <Card className="signup">
+        <SignupForm onSaveCustomerData={saveCustomerDataHandler} />
+      </Card>
     </div>
   );
 };

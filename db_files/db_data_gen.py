@@ -3,6 +3,7 @@ import httpx
 import json
 import trio
 import uuid
+import bcrypt
 from faker import Faker
 from datetime import timedelta
 from db_files.db_config import config
@@ -13,7 +14,6 @@ from tables.tickets import Tickets
 from tables.customers import Customers
 from tables.administrators import Administrators
 from tables.airline_companies import AirlineCompanies
-from werkzeug.security import generate_password_hash
 
 
 class DbDataGen(BaseDbDataGen):
@@ -58,9 +58,11 @@ class DbDataGen(BaseDbDataGen):
         return first_name, last_name, address, phone_number
 
     def create_user(self, j_son, user_role):
+        salt = bcrypt.gensalt()
         username, password, email = self.get_user_data(j_son)
         inserted_user = Users(username=username,
-                              password=generate_password_hash(password),
+                              password=bcrypt.hashpw(password.encode(
+                                  'utf8'), salt).decode('utf8'),
                               email=email,
                               public_id=str(uuid.uuid4()),
                               user_role=user_role)

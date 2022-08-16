@@ -15,7 +15,7 @@ class Users(Base):
         'user_roles.id', ondelete='CASCADE'), unique=False, nullable=False)
 
     userrole = relationship("UserRoles", backref=backref(
-        "users", uselist=True, passive_deletes=True))
+        "users", uselist=False, passive_deletes=True))
 
     def __repr__(self):
         return f'\n<User id={self.id} Username={self.username} Password={self.password} Email={self.email} User role={self.user_role}>'

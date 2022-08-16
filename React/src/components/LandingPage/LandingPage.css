@@ -13,18 +13,18 @@
   
   .LandingPage__title {
     position: absolute;
-    bottom: 18%;
-    right: 76%;
+    bottom: 58%;
+    right: 69%;
     color: white;
-    font-size: 4rem;
+    font-size: 4.5rem;
     padding: 15px;
   }
 
   .LandingPage__title2 {
     position: absolute;
-    bottom: 5%;
-    right: 57%;
+    bottom: 51%;
+    right: 69%;
     color: white;
-    font-size: 3rem;
+    font-size: 27px;
     padding: 15px;
   }

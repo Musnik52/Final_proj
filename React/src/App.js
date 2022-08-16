@@ -1,21 +1,32 @@
 import "./App.css";
 import React, { useState } from "react";
 import airlock_img from "./Assets/airlock1.png";
-import Flights from "./components/Flights";
+import customer_bg from "./Assets/abs_bg.jpg";
+import airline_bg from "./Assets/abs_bg.jpg";
+import admin_bg from "./Assets/abs_bg.jpg";
+import Flights from "./components/Flights/Flights";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Navbar from "./components/Navbar";
-import About from "./components/About";
-import Contact from "./components/Contact";
+import About from "./components/Miscellaneous/About";
+import Contact from "./components/Miscellaneous/Contact";
+import Reviews from "./components/Miscellaneous/Reviews";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import LandingPage from "./components/LandingPage/LandingPage";
+import CustomerProfile from "./components/Profiles/Customer/CustomerProfile";
+import AirlineProfile from "./components/Profiles/Airline/AirlineProfile";
+import AdminProfile from "./components/Profiles/Admin/AdminProfile";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedUser, setLoggedUser] = useState("");
+  const [userType, setUserType] = useState("");
 
-  const loginHandler = (username, password) => {
-    // check username and password
+  const loginHandler = (username, role) => {
+    console.log(username, role);
+    setLoggedUser(username);
     setIsLoggedIn(true);
+    setUserType(role);
   };
 
   const logoutHandler = () => {
@@ -25,7 +36,12 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <header className="App">
-          <Navbar isLoggedIn={isLoggedIn} onLogout={logoutHandler} />
+          <Navbar
+            isLoggedIn={isLoggedIn}
+            onLogout={logoutHandler}
+            userType={userType}
+            login_name={loggedUser}
+          />
           <Switch className="App">
             <Route exact path="/">
               <LandingPage img={airlock_img} />
@@ -44,6 +60,18 @@ function App() {
             </Route>
             <Route exact path="/about">
               <About />
+            </Route>
+            <Route exact path="/Reviews">
+              <Reviews />
+            </Route>
+            <Route exact path="/customer">
+              <CustomerProfile img={customer_bg} login_name={loggedUser} />
+            </Route>
+            <Route exact path="/airline">
+              <AirlineProfile img={airline_bg} login_name={loggedUser} />
+            </Route>
+            <Route exact path="/admin">
+              <AdminProfile img={admin_bg} login_name={loggedUser} />
             </Route>
           </Switch>
         </header>

@@ -1,14 +1,11 @@
 const { Router } = require("express");
 const router = Router();
 const {
-  getAllFlights,
-  getFlightById,
-  deleteFlight,
-  updateFlight,
-  addFlight,
+  updateAirline,
 } = require("../controllers/airlineController");
 
-router.route("/").get(getAllFlights).post(addFlight);
-router.route("/:id").get(getFlightById).delete(deleteFlight).put(updateFlight);
+router
+  .route("/:id")
+  .put(updateAirline);
 
 module.exports = router;

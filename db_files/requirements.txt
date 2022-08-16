@@ -24,5 +24,6 @@ Werkzeug>=2.0.3
 pika>=1.2.1
 requests>=2.27.1
 trio>=0.20.0
+bcrypt>=3.2.2
 
 

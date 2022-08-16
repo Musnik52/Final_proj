@@ -1,56 +1,56 @@
 .signup {
-  width: 90%;
-  max-width: 40rem;
-  margin: 2rem auto;
-  padding: 2rem;
+  width: 63% !important;
+  max-width: 67% !important;
+  margin: 2rem auto !important;
+  padding: 2rem !important;
 }
 
 .control {
-  margin: 1rem 0;
-  display: flex;
-  align-items: stretch;
-  flex-direction: column;
+  margin: 1rem 0 !important;
+  display: flex !important;
+  align-items: stretch !important;
+  flex-direction: column !important;
 }
 
 .control label,
 .control input {
-  display: block;
+  display: block !important;
 }
 
 .control label {
-  font-weight: bold;
-  flex: 0.5;
-  color: #464646;
-  margin-bottom: 0.5rem;
+  font-weight: bold !important;
+  flex: 0.7 !important;
+  color: #464646 !important;
+  margin-bottom: 0.5rem !important;
 }
 
 .control input {
-  flex: 3;
-  font: inherit;
-  padding: 0.35rem 0.35rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  flex: 3 !important;
+  font: inherit !important;
+  padding: 0.35rem 0.35rem !important;
+  border-radius: 6px !important;
+  border: 1px solid #ccc !important;
 }
 
 .control input:focus {
-  outline: none;
-  border-color: #4f005f;
-  background: #f6dbfc;
+  outline: none !important;
+  border-color: #4f005f !important;
+  background: #f6dbfc !important;
 }
 
 .control.invalid input {
-  border-color: red;
-  background: #fbdada;
+  border-color: red !important;
+  background: #fbdada !important;
 }
 
 .actions {
-  text-align: center;
+  text-align: center !important;
 }
 
 @media (min-width: 768px) {
   .control {
-    align-items: center;
-    flex-direction: row;
+    align-items: center !important;
+    flex-direction: row !important;
   }
 
 }

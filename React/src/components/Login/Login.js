@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Card from "../UI/Card/Card";
 import Button from "../UI/Button/Button";
 import "./Login.css";
+import axios from "axios";
 
 const Login = (props) => {
   const [enteredUsername, setEnteredUsername] = useState("");
@@ -11,27 +12,17 @@ const Login = (props) => {
   const [formIsValid, setFormIsValid] = useState(false);
 
   const usernameChangeHandler = (event) => {
-    // live update of input
     setEnteredUsername(event.target.value);
-
-    setFormIsValid(
-      // valodate email includes @ and password length is more than 6
-      enteredPassword.trim().length > 6
-    );
+    setFormIsValid(enteredPassword.trim().length > 6);
   };
 
   const passwordChangeHandler = (event) => {
-    // live update of input
     setEnteredPassword(event.target.value);
-
-    setFormIsValid(
-      // valodate email includes @ and password length is more than 6
-      event.target.value.trim().length > 6
-    );
+    setFormIsValid(event.target.value.trim().length > 6);
   };
 
   const validateUsernameHandler = () => {
-    setUsernameIsValid(enteredUsername.length > 0);
+    setUsernameIsValid(enteredUsername.length > 3);
   };
 
   const validatePasswordHandler = () => {
@@ -39,21 +30,23 @@ const Login = (props) => {
   };
 
   const submitHandler = (event) => {
-    // page doesn't refresh on submit
     event.preventDefault();
-    const loginData = {
-      username: enteredUsername,
-      password: enteredPassword,
-    };
-    console.log(loginData);
-    // RABBITMQ HERE TO LOGIN
-    props.onLogin(enteredUsername, enteredPassword);
+    axios
+      .post("http://localhost:8080/login", {
+        username: enteredUsername,
+        password: enteredPassword,
+      })
+      .then((res) => {
+        props.onLogin(res.data.user, res.data.role);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
     <React.Fragment>
       <div className="container">
-        <h4 className="center">Login</h4>
+        <br />
+        <h3 className="center">Login</h3>
         <Card className="login">
           <form onSubmit={submitHandler}>
             <div
@@ -61,8 +54,11 @@ const Login = (props) => {
                 usernameIsValid === false ? "invalid" : ""
               }`}
             >
-              <label htmlFor="text">Username</label>
+              <label className="control" htmlFor="text">
+                Username{" "}
+              </label>
               <input
+                className="control"
                 type="text"
                 id="text"
                 value={enteredUsername}
@@ -75,8 +71,12 @@ const Login = (props) => {
                 passwordIsValid === false ? "invalid" : ""
               }`}
             >
-              <label htmlFor="password">Password</label>
+              <br />
+              <label className="control" htmlFor="password">
+                Password{" "}
+              </label>
               <input
+                className="control"
                 type="password"
                 id="password"
                 value={enteredPassword}

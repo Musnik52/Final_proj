@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Button from "../UI/Button/Button";
-import "./SignupForm.css"
+import "./SignupForm.css";
 
 const SignupForm = (props) => {
   const [enteredFirstName, setEnteredFirstName] = useState("");
@@ -66,67 +66,78 @@ const SignupForm = (props) => {
     setEnteredUsername("");
     setEnteredPassword("");
     setEnteredEmail("");
-    
   };
 
   return (
     <form onSubmit={submitHandler}>
       <div className="new-customer__controls">
         <div className="new-customer__control">
-          <label>First Name</label>
+          <label className="control">First Name</label>
           <input
+            className="control"
             type="text"
             value={enteredFirstName}
             onChange={firstNameChangeHandler}
           />
         </div>
         <div className="new-customer__control">
-          <label>Last Name</label>
+          <label className="control">Last Name</label>
           <input
+            className="control"
             type="text"
             value={enteredLastName}
             onChange={lastNameChangeHandler}
           />
         </div>
         <div className="new-customer__control">
-          <label>Address</label>
+          <label className="control">Address</label>
           <input
+            className="control"
             type="text"
             value={enteredAddress}
             onChange={addressChangeHandler}
           />
         </div>
         <div className="new-customer__control">
-          <label>Phone Number</label>
+          <label className="control">Phone Number</label>
           <input
+            className="control"
             type="text"
             value={enteredPhone}
             onChange={phoneChangeHandler}
           />
         </div>
         <div className="new-customer__control">
-          <label>Credit Card Number</label>
-          <input type="number" value={enteredCCN} onChange={ccnChangeHandler} />
+          <label className="control">Credit Card Number</label>
+          <input
+            className="control"
+            type="number"
+            value={enteredCCN}
+            onChange={ccnChangeHandler}
+          />
         </div>
         <div className="new-customer__control">
-          <label>Username</label>
+          <label className="control">Username</label>
           <input
+            className="control"
             type="text"
             value={enteredUsername}
             onChange={usernameChangeHandler}
           />
         </div>
         <div className="new-customer__control">
-          <label>password</label>
+          <label className="control">password</label>
           <input
+            className="control"
             type="password"
             value={enteredPassword}
             onChange={passwordChangeHandler}
           />
         </div>
         <div className="new-customer__control">
-          <label>E-mail</label>
+          <label className="control">E-mail</label>
           <input
+            className="control"
             type="email"
             value={enteredEmail}
             onChange={emailChangeHandler}

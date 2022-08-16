@@ -9,7 +9,7 @@ class DbRabbitConsumer:
         self.connection = pika.BlockingConnection(
             pika.ConnectionParameters('localhost'))
         self.channel = self.connection.channel()
-        self.channel.queue_declare(queue=self.queue_name)
+        self.channel.queue_declare(queue=self.queue_name, durable=True)
 
     def consume(self):
         self.channel.basic_consume(queue=self.queue_name,

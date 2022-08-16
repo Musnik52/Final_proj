@@ -11,6 +11,7 @@ from errors.error_invalid_country import InvalidCountry
 from errors.error_flight_not_found import FlightNotFound
 from errors.error_airline_not_found import AirlineNotFound
 
+
 class FacadeBase(ABC):
 
     @abstractmethod
@@ -25,31 +26,38 @@ class FacadeBase(ABC):
 
     def get_flight_by_id(self, id):
         self.logger.logger.debug(f'Attempting to fetch flight #{id}...')
-        if not isinstance(id, int): 
-            self.logger.logger.error(f'{InvalidInput} - Input must be an integer!')
+        if not isinstance(id, int):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be an integer!')
             raise InvalidInput('Input must be an integer!')
-        elif self.repo.get_by_id(Flights, id) == None: 
-            self.logger.logger.error(f'{FlightNotFound} - Flight #{id} was not found!')
+        elif self.repo.get_by_id(Flights, id) == None:
+            self.logger.logger.error(
+                f'{FlightNotFound} - Flight #{id} was not found!')
             raise FlightNotFound
-        else: 
+        else:
             self.logger.logger.info(f'Flight Displayed!')
             return self.repo.get_by_id(Flights, id)
 
     def get_flights_by_parameters(self, origin_country_id, destination_country_id, date):
-        self.logger.logger.debug(f'Attempting to fetch flight by parameters...')
-        if not isinstance(origin_country_id, int): 
-            self.logger.logger.error(f'{InvalidInput} - Input must be an integer!')
+        self.logger.logger.debug(
+            f'Attempting to fetch flight by parameters...')
+        if not isinstance(origin_country_id, int):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be an integer!')
             raise InvalidInput('Input must be an integer!')
-        elif not isinstance(destination_country_id, int): 
-            self.logger.logger.error(f'{InvalidInput} - Input must be an integer!')
+        elif not isinstance(destination_country_id, int):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be an integer!')
             raise InvalidInput('Input must be an integer!')
-        elif not isinstance(date, datetime):  
-            self.logger.logger.error(f'{InvalidInput} - Input must be a datetime object!')
+        elif not isinstance(date, datetime):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be a datetime object!')
             raise InvalidInput('Input must be a datetime object!')
-        elif self.repo.get_by_condition(Flights, lambda query: query.filter(Flights.origin_country_id == origin_country_id, Flights.destination_country_id == destination_country_id, Flights.departure_time == date)) == []: 
-            self.logger.logger.error(f'{FlightNotFound} - Flight was not found!')
+        elif self.repo.get_by_condition(Flights, lambda query: query.filter(Flights.origin_country_id == origin_country_id, Flights.destination_country_id == destination_country_id, Flights.departure_time == date)) == []:
+            self.logger.logger.error(
+                f'{FlightNotFound} - Flight was not found!')
             raise FlightNotFound
-        else: 
+        else:
             self.logger.logger.info(f'Flight Displayed!')
             return self.repo.get_by_condition(Flights, lambda query: query.filter(Flights.origin_country_id == origin_country_id, Flights.destination_country_id == destination_country_id, Flights.departure_time == date))
 
@@ -59,13 +67,15 @@ class FacadeBase(ABC):
 
     def get_airline_by_id(self, id):
         self.logger.logger.debug(f'Attempting to fetch flight #{id}...')
-        if not isinstance(id, int): 
-            self.logger.logger.error(f'{InvalidInput} - Input must be an integer!')
+        if not isinstance(id, int):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be an integer!')
             raise InvalidInput('Input must be an integer!')
-        elif self.repo.get_by_id(AirlineCompanies, id) == None: 
-            self.logger.logger.error(f'{AirlineNotFound} - Airline #{id} was not found!')
+        elif self.repo.get_by_id(AirlineCompanies, id) == None:
+            self.logger.logger.error(
+                f'{AirlineNotFound} - Airline #{id} was not found!')
             raise AirlineNotFound
-        else: 
+        else:
             self.logger.logger.info(f'Airline Displayed!')
             return self.repo.get_by_id(AirlineCompanies, id)
 
@@ -74,24 +84,28 @@ class FacadeBase(ABC):
         return self.repo.get_all(Countries)
 
     def get_country_by_id(self, id):
-        if not isinstance(id, int): 
-            self.logger.logger.error(f'{InvalidInput} - Input must be an integer!')
+        if not isinstance(id, int):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be an integer!')
             raise InvalidInput('Input must be an integer!')
-        elif self.repo.get_by_id(Countries, id) == None: 
-            self.logger.logger.error(f'{InvalidCountry} - Country #{id} was not found!')
+        elif self.repo.get_by_id(Countries, id) == None:
+            self.logger.logger.error(
+                f'{InvalidCountry} - Country #{id} was not found!')
             raise InvalidCountry
-        else: 
+        else:
             self.logger.logger.info(f'Country Displayed!')
             return self.repo.get_by_id(Countries, id)
 
     def create_user(self, user):
-        if not isinstance(user, Users): 
-            self.logger.logger.error(f'{InvalidInput} - Input must be a "Users" object!')
+        if not isinstance(user, Users):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be a "Users" object!')
             raise InvalidInput('Input must be a "Users" object!')
-        elif len(user.password) < 6: 
-            self.logger.logger.error(f'{PasswordTooShort} - Use at least 6 characters for the password!')
+        elif len(user.password) < 6:
+            self.logger.logger.error(
+                f'{PasswordTooShort} - Use at least 6 characters for the password!')
             raise PasswordTooShort
-        else: 
+        else:
             self.logger.logger.info(f'User {user.username} created!')
             self.repo.add(user)
 

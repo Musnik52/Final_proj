@@ -16,15 +16,15 @@ updating information, create new users, change flight info & more!
     Most of the back-end is based on python
     and its libraries (see 'requirements.txt' file).
     Node.js is used to set up the server and manage API requests.
-    Communication is via microservice.
+    Communication is via RabbitMQ (a microservice).
 
 - _Front-end:_
     The components are renderd using React.js,
     with the use of custom CSS & Bootstrap libraries.
 
 - _Databases:_
-    SQL - Postgres
-    NoSQL - MongoDB
+    SQL - Postgres (used to store the main database). 
+    NoSQL - MongoDB (used to sore a copy of the "users" table, for validations).
 
 - _Additional:_
     Micro-service: RabbitMQ

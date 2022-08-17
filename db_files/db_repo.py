@@ -4,7 +4,7 @@ import bcrypt
 from datetime import datetime
 from sqlalchemy import asc
 from db_files.logger import Logger
-from db_files.db_config import create_all_entities, config
+from db_files.db_config import mongo_delete, mongo_insert, create_all_entities, config
 from tables.users import Users
 from tables.flights import Flights
 from tables.tickets import Tickets
@@ -103,6 +103,7 @@ class DbRepo:
     def reset_db(self):
         self.logger.logger.debug(f'Reseting initial DB.')
         self.delete_all_tables()
+        mongo_delete()
         create_all_entities()
         self.reset_auto_inc(Countries)
         self.reset_auto_inc(Users)
@@ -112,47 +113,86 @@ class DbRepo:
         self.reset_auto_inc(Tickets)
         self.reset_auto_inc(Administrators)
         self.reset_auto_inc(UserRoles)
-        countries = open(config['db']['countries_json'])
-        data = json.load(countries)
-        for i in data:
-            self.add(Countries(name=i['name']))
-        countries.close()
+
         salt = bcrypt.gensalt()
+        with open(config['db']['countries_json']) as countries:
+            data = json.load(countries)
+            for i in data:
+                self.add(Countries(name=i['name']))
+
         self.add_all([UserRoles(role_name=config['user_roles']['1']),
                       UserRoles(role_name=config['user_roles']['2']),
                       UserRoles(role_name=config['user_roles']['3'])])
-        self.add_all([Users(username='b0r1s',
-                            password=bcrypt.hashpw('boris1992'.encode(
-                                'utf8'), salt).decode('utf8'),
-                            email='boris@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['airline']),
-                      Users(username='m4x1m',
-                            password=bcrypt.hashpw('2themax'.encode('utf8'), salt).decode('utf8'), email='max@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['airline']),
-                      Users(username='l10r',
-                            password=bcrypt.hashpw('lior1999'.encode('utf8'), salt).decode('utf8'), email='lior@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['admin']),
-                      Users(username='sh4ch4r',
-                            password=bcrypt.hashpw('18031991'.encode('utf8'), salt).decode('utf8'), email='shachar@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['admin']),
-                      Users(username='k0st4',
-                            password=bcrypt.hashpw('1kosta1'.encode('utf8'), salt).decode('utf8'), email='kosta@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['customer']),
-                      Users(username='3m1l',
-                            password=bcrypt.hashpw('e0m1i2l'.encode('utf8'), salt).decode('utf8'), email='emil@jb.com',
-                            public_id=str(uuid.uuid4()), user_role=config['user_roles']['customer']),
-                      Users(username='y4h4v',
-                            password=bcrypt.hashpw('y4h4av5ch'.encode('utf8'), salt).decode('utf8'), email='yahav@jb.com', public_id=str(uuid.uuid4()), user_role=config['user_roles']['customer'])])
-        self.add_all([AirlineCompanies(name='bazooka air', country_id=1, user_id=1),
-                      AirlineCompanies(name='sky high', country_id=2, user_id=2)])
-        self.add_all([Administrators(first_name='lior', last_name='musnik', user_id=3),
-                      Administrators(first_name='shachar', last_name='harush', user_id=4)])
-        self.add_all([Customers(first_name='kosta', last_name='makarkov', address='rashi 31', phone_number='0507897765', credit_card_number='13323432', user_id=5),
-                      Customers(first_name='emil', last_name='tayeb', address='amsterdam 32',
-                                phone_number='0523452231', credit_card_number='13245678', user_id=6),
-                      Customers(first_name='yahav', last_name='schwartz', address='lachish 32', phone_number='04786367899', credit_card_number='1342455678', user_id=7)])
-        self.add_all([Flights(airline_company_id=1, origin_country_id=1, destination_country_id=2, departure_time=datetime(2022, 1, 1, 10, 10, 10), landing_time=datetime(2022, 1, 24, 10, 29, 1), remaining_tickets=0),
-                      Flights(airline_company_id=2, origin_country_id=2, destination_country_id=1, departure_time=datetime(
-                          2022, 3, 18, 10, 12, 10), landing_time=datetime(2022, 12, 4, 23, 29, 1), remaining_tickets=3),
-                      Flights(airline_company_id=2, origin_country_id=3, destination_country_id=2, departure_time=datetime(
-                          2022, 1, 2, 10, 12, 10), landing_time=datetime(2022, 1, 24, 10, 29, 1), remaining_tickets=400),
-                      Flights(airline_company_id=1, origin_country_id=1, destination_country_id=3, departure_time=datetime(2022, 1, 2, 10, 12, 10), landing_time=datetime(2022, 1, 24, 10, 29, 1), remaining_tickets=0)])
-        self.add_all([Tickets(flight_id=1, customer_id=1),
-                      Tickets(flight_id=1, customer_id=2),
-                      Tickets(flight_id=3, customer_id=2)])
+
+        with open(config['db']['users_json']) as users:
+            data = json.load(users)
+            for i in data:
+                mongo_insert({"username": i["username"],
+                              "password": bcrypt.hashpw(i["password"].encode(
+                                  "utf8"), salt).decode("utf8"),
+                              "email": i["email"],
+                              "public_id": str(uuid.uuid4()),
+                              "user_role": i["user_role"]})
+                self.add(Users(username=i['username'],
+                               password=bcrypt.hashpw(i['password'].encode(
+                                   'utf8'), salt).decode('utf8'),
+                               email=i['email'],
+                               public_id=str(uuid.uuid4()),
+                               user_role=config['user_roles'][f'{i["user_role"]}']))
+
+        self.add_all([AirlineCompanies(name='bazooka air',
+                                       country_id=1,
+                                       user_id=1),
+                      AirlineCompanies(name='sky high',
+                                       country_id=2,
+                                       user_id=2)])
+
+        self.add_all([Administrators(first_name='lior',
+                                     last_name='musnik',
+                                     user_id=3),
+                      Administrators(first_name='shachar',
+                                     last_name='harush',
+                                     user_id=4)])
+
+        self.add_all([Customers(first_name='kosta',
+                                last_name='makarkov',
+                                address='rashi 31',
+                                phone_number='0507897765', credit_card_number='13323432',
+                                user_id=5),
+                      Customers(first_name='emil',
+                                last_name='tayeb',
+                                address='amsterdam 32',
+                                phone_number='0523452231', credit_card_number='13245678',
+                                user_id=6),
+                      Customers(first_name='yahav',
+                                last_name='schwartz',
+                                address='lachish 32',
+                                phone_number='04786367899', credit_card_number='1342455678',
+                                user_id=7)])
+
+        self.add_all([Flights(airline_company_id=1,
+                              origin_country_id=1,
+                              destination_country_id=2,
+                              departure_time=datetime(2022, 1, 1, 10, 10, 10), landing_time=datetime(2022, 1, 24, 10, 29, 1), remaining_tickets=0),
+                      Flights(airline_company_id=2,
+                              origin_country_id=2,
+                              destination_country_id=1,
+                              departure_time=datetime(2022, 3, 18, 10, 12, 10),
+                              landing_time=datetime(2022, 12, 4, 23, 29, 1), remaining_tickets=3),
+                      Flights(airline_company_id=2,
+                              origin_country_id=3,
+                              destination_country_id=2,
+                              departure_time=datetime(2022, 1, 2, 10, 12, 10), landing_time=datetime(2022, 1, 24, 10, 29, 1), remaining_tickets=400),
+                      Flights(airline_company_id=1,
+                              origin_country_id=1,
+                              destination_country_id=3,
+                              departure_time=datetime(2022, 1, 2, 10, 12, 10), landing_time=datetime(2022, 1, 24, 10, 29, 1), remaining_tickets=0)])
+
+        self.add_all([Tickets(flight_id=1,
+                              customer_id=1),
+                      Tickets(flight_id=1,
+                              customer_id=2),
+                      Tickets(flight_id=3,
+                              customer_id=2)])
+
         self.create_all_sp(config['db']['sp_file'])

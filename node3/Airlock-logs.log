@@ -1,0 +1,102 @@
+{
+  message: '====== System startup ======',
+  level: 'debug',
+  label: 'main module',
+  timestamp: '2022-08-17T20:37:29.786Z'
+}
+{
+  message: 'Listening to http://localhost:8080',
+  level: 'info',
+  label: 'main module',
+  timestamp: '2022-08-17T20:37:31.261Z'
+}
+{
+  message: '====== System startup ======',
+  level: 'debug',
+  label: 'main module',
+  timestamp: '2022-08-17T20:37:33.722Z'
+}
+{
+  message: 'Listening to http://localhost:8080',
+  level: 'info',
+  label: 'main module',
+  timestamp: '2022-08-17T20:37:35.733Z'
+}
+{
+  message: 'failed to add a customer. Error: ReferenceError: password is not defined',
+  level: 'error',
+  label: 'main module',
+  timestamp: '2022-08-17T20:38:08.520Z'
+}
+{
+  message: 'failed to add a customer. Error: ReferenceError: password is not defined',
+  level: 'error',
+  label: 'main module',
+  timestamp: '2022-08-17T20:39:54.422Z'
+}
+{
+  message: '====== System startup ======',
+  level: 'debug',
+  label: 'main module',
+  timestamp: '2022-08-17T20:40:29.146Z'
+}
+{
+  message: 'Listening to http://localhost:8080',
+  level: 'info',
+  label: 'main module',
+  timestamp: '2022-08-17T20:40:30.724Z'
+}
+{
+  message: 'failed to add a customer. Error: ReferenceError: password is not defined',
+  level: 'error',
+  label: 'main module',
+  timestamp: '2022-08-17T20:40:58.724Z'
+}
+{
+  message: '====== System startup ======',
+  level: 'debug',
+  label: 'main module',
+  timestamp: '2022-08-17T20:42:39.399Z'
+}
+{
+  message: 'Listening to http://localhost:8080',
+  level: 'info',
+  label: 'main module',
+  timestamp: '2022-08-17T20:42:40.999Z'
+}
+{
+  message: '====== System startup ======',
+  level: 'debug',
+  label: 'main module',
+  timestamp: '2022-08-17T20:42:44.800Z'
+}
+{
+  message: 'Listening to http://localhost:8080',
+  level: 'info',
+  label: 'main module',
+  timestamp: '2022-08-17T20:42:46.316Z'
+}
+{
+  message: '====== System startup ======',
+  level: 'debug',
+  label: 'main module',
+  timestamp: '2022-08-17T20:43:59.674Z'
+}
+{
+  message: 'Listening to http://localhost:8080',
+  level: 'info',
+  label: 'main module',
+  timestamp: '2022-08-17T20:44:01.370Z'
+}
+{
+  message: '====== System startup ======',
+  level: 'debug',
+  label: 'main module',
+  timestamp: '2022-08-17T20:44:02.399Z'
+}
+{
+  message: 'Listening to http://localhost:8080',
+  level: 'info',
+  label: 'main module',
+  timestamp: '2022-08-17T20:44:03.940Z'
+}

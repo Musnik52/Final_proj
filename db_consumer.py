@@ -9,7 +9,7 @@ from tables.customers import Customers
 from tables.administrators import Administrators
 from tables.airline_companies import AirlineCompanies
 from db_files.db_repo import DbRepo
-from db_files.db_config import local_session, config
+from db_files.db_config import local_session, config, mongo_insert
 from db_files.db_rabbit_consumer import DbRabbitConsumer
 from db_files.db_rabbit_producer import DbRabbitProducer
 
@@ -26,10 +26,16 @@ def customer_callback(ch, method, properties, body):
         salt = bcrypt.gensalt()
         new_user = Users(username=data["username"],
                          password=bcrypt.hashpw(data["password"].encode(
-                                'utf8'), salt).decode('utf8'),
+                             'utf8'), salt).decode('utf8'),
                          email=data["email"],
-                         public_id=str(uuid.uuid4()),
+                         public_id=str(data['public_id']),
                          user_role=config["user_roles"]["customer"])
+        mongo_insert({"username": data["username"],
+                      "password": bcrypt.hashpw(data["password"].encode(
+                          'utf8'), salt).decode('utf8'),
+                      "email": data["email"],
+                      "public_id": data["public_id"],
+                      "user_role": "customer"})
         new_customer = Customers(first_name=data["first_name"],
                                  last_name=data["last_name"],
                                  address=data["address"],

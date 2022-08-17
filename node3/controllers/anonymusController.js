@@ -87,8 +87,7 @@ const Login = async (req, res) => {
 
 const addCustomer = async (req, res) => {
   const qResName = `customer ${uuid.v4()}`;
-  const salt = await bcrypt.genSalt();
-  const { username, email, firstName, lastName, address, phone, ccn } =
+  const { username, password, email, firstName, lastName, address, phone, ccn } =
     req.body;
   try {
     reqMsg = {
@@ -96,6 +95,7 @@ const addCustomer = async (req, res) => {
       username: username,
       password: password,
       email: email,
+      public_id: uuid.v4(),
       first_name: firstName,
       last_name: lastName,
       address: address,
@@ -164,41 +164,7 @@ const getFlightById = async (req, res) => {
   res.status(200).json({ flight });
 };
 
-const Sync = async (req, res) => {
-  const { username, password, email, public_id, user_role } =
-    await connectedKnex("users")
-      .select(
-        "username",
-        "password",
-        "email",
-        "public_id",
-        "role.role_name as user_role"
-      )
-      .join("user_roles as role", function () {
-        this.on("users.user_role", "=", "role.id");
-      })
-      .first(); // NEEDS TO CHANGE TO ALL
-  try {
-    const user = await User.create({
-      username,
-      password,
-      email,
-      public_id,
-      user_role,
-    });
-    const token = createToken(user._id);
-    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-    res
-      .status(201)
-      .json({ id: user._id, user: user.username, role: user.user_role });
-  } catch (err) {
-    const errors = handleErrors(err);
-    res.status(400).json({ errors });
-  }
-};
-
 module.exports = {
-  Sync,
   Login,
   addCustomer,
   getAllFlights,

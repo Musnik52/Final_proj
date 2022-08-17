@@ -1,0 +1,44 @@
+[
+  {
+    "username": "b0r1s",
+    "password": "boris1992",
+    "email": "boris@jb.com",
+    "user_role": "airline"
+  },
+  {
+    "username": "m4x1m",
+    "password": "2themax",
+    "email": "max@jb.com",
+    "user_role": "airline"
+  },
+  {
+    "username": "l10r",
+    "password": "lior1999",
+    "email": "lior@jb.com",
+    "user_role": "admin"
+  },
+  {
+    "username": "sh4ch4r",
+    "password": "18031991",
+    "email": "shachar@jb.com",
+    "user_role": "admin"
+  },
+  {
+    "username": "k0st4",
+    "password": "1kosta1",
+    "email": "kosta@jb.com",
+    "user_role": "customer"
+  },
+  {
+    "username": "3m1l",
+    "password": "e0m1i2l",
+    "email": "emil@jb.com",
+    "user_role": "customer"
+  },
+  {
+    "username": "y4h4v",
+    "password": "y4h4v5ch",
+    "email": "yahav@jb.com",
+    "user_role": "customer"
+  }
+]

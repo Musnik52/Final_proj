@@ -1,0 +1,7 @@
+.card{
+  width: 19rem;
+  max-width: 40rem;
+  max-height: 40rem;
+  margin: 2rem auto;
+  padding: 2rem;
+}

@@ -13,12 +13,12 @@ const Login = (props) => {
 
   const usernameChangeHandler = (event) => {
     setEnteredUsername(event.target.value);
-    setFormIsValid(enteredPassword.trim().length > 6);
+    setFormIsValid(enteredPassword.trim().length > 3);
   };
 
   const passwordChangeHandler = (event) => {
     setEnteredPassword(event.target.value);
-    setFormIsValid(event.target.value.trim().length > 6);
+    setFormIsValid(event.target.value.trim().length > 3);
   };
 
   const validateUsernameHandler = () => {
@@ -26,7 +26,7 @@ const Login = (props) => {
   };
 
   const validatePasswordHandler = () => {
-    setPasswordIsValid(enteredPassword.trim().length > 6);
+    setPasswordIsValid(enteredPassword.trim().length > 3);
   };
 
   const submitHandler = (event) => {
@@ -37,7 +37,7 @@ const Login = (props) => {
         password: enteredPassword,
       })
       .then((res) => {
-        props.onLogin(res.data.user, res.data.role);
+        props.onLogin(res.data.user, res.data.role, res.data.password);
       })
       .catch((err) => console.log(err));
   };

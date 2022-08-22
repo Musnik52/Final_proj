@@ -1,35 +1,31 @@
 import React, { useEffect, useState } from "react";
-import TableBoard from "../UI/Table/TableBoard";
 import axios from "axios";
+import TableBoard from "../../UI/Table/TableBoard";
 
-const Flights = (props) => {
+const Airlines = (props) => {
   const colNames = [
-    "id",
+    "flight id",
     "airline",
     "origin country",
-    "destination country",
+    "destinamtion country",
     "departure time",
     "landing time",
     "remaining tickets",
   ];
-
   const [flights, setFlights] = useState([]);
   useEffect(() => {
-     axios.get(`http://localhost:8080/flights`).then((res) => {
-      console.log(res.data.flights);
+    axios.get(`http://localhost:8080/admins/flights/`).then((res) => {
       setFlights(res.data.flights);
     });
   }, []);
-
   return (
     <React.Fragment>
       <div className="container">
-        <br />
-        <h4 className="center">Flights Board</h4>
+        <h4 className="">Flights</h4>
         <TableBoard list={flights} tableCol={colNames} />
       </div>
     </React.Fragment>
   );
 };
 
-export default Flights;
+export default Airlines;

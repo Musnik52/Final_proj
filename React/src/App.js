@@ -20,11 +20,13 @@ import AdminProfile from "./components/Profiles/Admin/AdminProfile";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedUser, setLoggedUser] = useState("");
+  const [pwd, setPwd] = useState("");
   const [userType, setUserType] = useState("");
 
-  const loginHandler = (username, role) => {
-    console.log(username, role);
+  const loginHandler = (username, role, password) => {
+    console.log(username, role, password);
     setLoggedUser(username);
+    setPwd(password);
     setIsLoggedIn(true);
     setUserType(role);
   };
@@ -65,13 +67,21 @@ function App() {
               <Reviews />
             </Route>
             <Route exact path="/customer">
-              <CustomerProfile img={customer_bg} login_name={loggedUser} />
+              <CustomerProfile
+                img={customer_bg}
+                login_name={loggedUser}
+                pwd={pwd}
+              />
             </Route>
             <Route exact path="/airline">
-              <AirlineProfile img={airline_bg} login_name={loggedUser} />
+              <AirlineProfile
+                img={airline_bg}
+                login_name={loggedUser}
+                pwd={pwd}
+              />
             </Route>
             <Route exact path="/admin">
-              <AdminProfile img={admin_bg} login_name={loggedUser} />
+              <AdminProfile img={admin_bg} login_name={loggedUser} pwd={pwd} />
             </Route>
           </Switch>
         </header>

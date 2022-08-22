@@ -47,12 +47,13 @@ const createToken = (id) => {
 
 const Login = async (req, res) => {
   const { username, password } = req.body;
-
   try {
     const user = await User.login(username, password);
     const token = createToken(user._id);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-    res.status(200).json({ user: user.username, role: user.user_role });
+    res
+      .status(200)
+      .json({ user: user.username, role: user.user_role, password: password });
   } catch (err) {
     const errors = handleErrors(err);
     res.status(400).json({ errors });
@@ -64,34 +65,21 @@ const Login = async (req, res) => {
 //     res.redirect("/");
 //   };
 
-// const Signup = async (req, res) => {
-//   const { username, password, email, public_id, user_role } = req.body;
-//   try {
-//     const user = await User.create({
-//       username,
-//       password,
-//       email,
-//       public_id,
-//       user_role,
-//     });
-//     const token = createToken(user._id);
-//     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-//     res
-//       .status(201)
-//       .json({ id: user._id, user: user.username, role: user.role });
-//   } catch (err) {
-//     const errors = handleErrors(err);
-//     res.status(400).json({ errors });
-//   }
-// };
-
 const addCustomer = async (req, res) => {
   const qResName = `customer ${uuid.v4()}`;
-  const { username, password, email, firstName, lastName, address, phone, ccn } =
-    req.body;
+  const {
+    username,
+    password,
+    email,
+    firstName,
+    lastName,
+    address,
+    phone,
+    ccn,
+  } = req.body;
   try {
     reqMsg = {
-      action: "add",
+      action: "addCustomer",
       username: username,
       password: password,
       email: email,

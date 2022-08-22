@@ -21,9 +21,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(anonymusRoutes);
-app.use("/admins", requireAuth, adminRoutes);
-app.use("/airlines", requireAuth, airlineRoutes);
-app.use("/customers", requireAuth, customerRoutes);
+app.use("/admins", adminRoutes); // requireAuth
+app.use("/airlines", airlineRoutes); //requireAuth
+app.use("/customers", customerRoutes); //requireAuth
 
 // Mongodb connection
 const dbURI = config.get("mongo");
@@ -33,7 +33,7 @@ mongoose
     console.log(result.connection);
     app.listen(port.listening, () =>
       logger.info(`Listening to http://localhost:${port.listening}`)
-    )
+    );
   })
   .catch((err) => logger.info(err));
 

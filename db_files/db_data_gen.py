@@ -6,7 +6,8 @@ import uuid
 import bcrypt
 from faker import Faker
 from datetime import timedelta
-from db_files.db_config import config
+from db_files.logger import Logger
+from db_files.db_config import config, mongo_insert
 from db_files.db_data_gen_base import BaseDbDataGen
 from tables.users import Users
 from tables.flights import Flights
@@ -26,6 +27,7 @@ class DbDataGen(BaseDbDataGen):
         super().__init__()
         self.response = config['db']['api']
         self.fake = Faker()
+        self.logger = Logger.get_instance()
 
     async def get_data(self):
         async with httpx.AsyncClient() as client:
@@ -60,12 +62,21 @@ class DbDataGen(BaseDbDataGen):
     def create_user(self, j_son, user_role):
         salt = bcrypt.gensalt()
         username, password, email = self.get_user_data(j_son)
+        publicId = str(uuid.uuid4())
+        self.logger.logger.debug(
+            f'### Adding {username}, {password}, {email}.###')
         inserted_user = Users(username=username,
                               password=bcrypt.hashpw(password.encode(
                                   'utf8'), salt).decode('utf8'),
                               email=email,
-                              public_id=str(uuid.uuid4()),
+                              public_id=publicId,
                               user_role=user_role)
+        mongo_insert({"username": username,
+                      "password": bcrypt.hashpw(password.encode(
+                          'utf8'), salt).decode('utf8'),
+                      "email": email,
+                      "public_id": publicId,
+                      "user_role": config['user_roles'][f'{user_role}']})
         self.repo.add(inserted_user)
         return inserted_user
 

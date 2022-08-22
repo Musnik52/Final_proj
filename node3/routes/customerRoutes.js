@@ -3,13 +3,15 @@ const router = Router();
 const {
   deleteCustomer,
   updateCustomer,
-  // getMyTickets,
+  getMyTickets,
+  getMyData,
 } = require("../controllers/customerController");
 
-// router.route("/:id/tickets").get(getMyTickets)
+router.route("/tickets/:user").get(getMyTickets);
 router
-  .route("/:id")
+  .route("/:user")
   .delete(deleteCustomer)
-  .put(updateCustomer);
+  .put(updateCustomer)
+  .get(getMyData);
 
 module.exports = router;

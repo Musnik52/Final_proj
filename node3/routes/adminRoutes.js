@@ -42,7 +42,7 @@ router
   .get(getCustomerById)
   .delete(deleteCustomer)
   .put(updateCustomer);
-router
+  router
   .route("/flights/:id")
   .get(getFlightById)
   .delete(deleteFlight)

@@ -90,7 +90,12 @@ const addAdmin = async (req, res) => {
 };
 
 const getAllAirlines = async (req, res) => {
-  const airlines = await connectedKnex("airline_companies").select("*");
+  const airlines = await connectedKnex("airline_companies")
+    .select("airline_companies.id", "airline_companies.name", "users.username")
+    .orderBy("airline_companies.id", "asc")
+    .join("users", function () {
+      this.on("airline_companies.user_id", "=", "users.id");
+    });
   res.status(200).json({ airlines });
 };
 
@@ -157,7 +162,18 @@ const addAirline = async (req, res) => {
 };
 
 const getAllCustomers = async (req, res) => {
-  const customers = await connectedKnex("customers").select("*");
+  const customers = await connectedKnex("customers").select(
+    "customers.id",
+    "first_name",
+    "last_name",
+    "address",
+    "phone_number",
+    "users.email",
+    "credit_card_number",
+    "users.username"
+  ).join("users", function () {
+    this.on("customers.user_id", "=", "users.id");
+  });
   res.status(200).json({ customers });
 };
 
@@ -177,10 +193,7 @@ const getAllUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
   const id = req.params.id;
-  const user = await connectedKnex("users")
-    .select("*")
-    .where("id", id)
-    .first();
+  const user = await connectedKnex("users").select("*").where("id", id).first();
   res.status(200).json({ user });
 };
 
@@ -188,9 +201,7 @@ const updateUser = async (req, res) => {
   const id = req.params.id;
   try {
     user = req.body;
-    const result = await connectedKnex("users")
-      .where("id", id)
-      .update(user);
+    const result = await connectedKnex("users").where("id", id).update(user);
     res.status(200).json({
       res: "success",
       url: `/users/${id}`,

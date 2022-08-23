@@ -152,9 +152,17 @@ const getFlightById = async (req, res) => {
   res.status(200).json({ flight });
 };
 
+const getAllCountries = async (req, res) => {
+  const countries = await connectedKnex("countries")
+    .select("id", "name")
+    .orderBy("name", "asc");
+  res.status(200).json({ countries });
+};
+
 module.exports = {
   Login,
   addCustomer,
   getAllFlights,
   getFlightById,
+  getAllCountries,
 };

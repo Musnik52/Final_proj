@@ -27,7 +27,6 @@ const deleteCustomer = async (req, res) => {
 
 const updateCustomer = async (req, res) => {
   const qResName = `customer ${uuid.v4()}`;
-  console.log(req.body)
   try {
     reqMsg = {
       action: "updateCustomer",

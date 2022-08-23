@@ -57,7 +57,7 @@ const AirlineProfile = (props) => {
       </Card>
       {isMyFlights && <MyFlights username={props.login_name} />}
       {isAddFlight && <NewFlight />}
-      {isUserSettings && <UserSettings />}
+      {isUserSettings && <UserSettings username={props.login_name} pwd={props.pwd}/>}
     </React.Fragment>
   );
 };

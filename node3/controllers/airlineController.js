@@ -1,18 +1,25 @@
 const connectedKnex = require("../knex-connector");
 const { logger } = require("../logger");
+const { sendMsg } = require("../producer");
+const { recieveMsg } = require("../consumer");
+const uuid = require("uuid");
 
 const updateAirline = async (req, res) => {
-  const id = req.params.id;
+  const qResName = `airline ${uuid.v4()}`;
+  console.log(req.body)
   try {
-    airline = req.body;
-    const result = await connectedKnex("airline_companies")
-      .where("id", id)
-      .update(airline);
-    res.status(200).json({
-      res: "success",
-      url: `/airlines/${id}`,
-      result,
-    });
+    reqMsg = {
+      action: "updateAirline",
+      username: req.body.username,
+      password: req.body.password,
+      id: req.body.id,
+      name: req.body.name,
+      country_id: req.body.countryId,
+      user_id: req.body.UserId,
+      queue_name: `response ${qResName}`,
+    };
+    recieveMsg(reqMsg.queue_name, res);
+    await sendMsg("airline", reqMsg);
   } catch (e) {
     logger.error(`failed to update airline. Error: ${e}`);
     res.status(400).send({
@@ -47,7 +54,7 @@ const getMyFlights = async (req, res) => {
     })
     .join("countries as c2", function () {
       this.on("flights.destination_country_id", "=", "c2.id");
-    })
+    });
   res.status(200).json({ flights });
 };
 
@@ -104,10 +111,23 @@ const addFlight = async (req, res) => {
   }
 };
 
+const getMyData = async (req, res) => {
+  const myUser = await connectedKnex("users")
+    .select("*")
+    .where("username", req.params.user)
+    .first();
+  const airline = await connectedKnex("airline_companies")
+    .select("*")
+    .where("user_id", myUser.id)
+    .first();
+  res.status(200).json({ airline });
+}
+
 module.exports = {
   getMyFlights,
   updateAirline,
   deleteFlight,
   updateFlight,
   addFlight,
+  getMyData,
 };

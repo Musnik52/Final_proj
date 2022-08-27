@@ -17,7 +17,7 @@ const UserSettings = (props) => {
     axios
       .get(`http://localhost:8080/customers/${props.username}`)
       .then((res) => {
-        console.log(res.data.customer)
+        console.log(res.data.customer);
         setEnteredFirstName(res.data.customer.first_name);
         setEnteredLastName(res.data.customer.last_name);
         setEnteredAddress(res.data.customer.address);
@@ -70,6 +70,18 @@ const UserSettings = (props) => {
       })
       .catch((err) => console.log(err));
   };
+
+  const deleteHandler = (event) => {
+    axios
+      .delete(`http://localhost:8080/customers/${props.username}`, {
+        data: { pwd: props.pwd },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+    return props.onLogout();
+  };
   return (
     <Card className="update">
       <h4 className="">User Settings</h4>
@@ -119,6 +131,16 @@ const UserSettings = (props) => {
               value={enteredCCN}
               onChange={ccnChangeHandler}
             />
+          </div>
+          <div className="new-customer__control">
+            <label className="control">Delete Profile</label>
+            <button
+              className="btn btn-danger delete_customer"
+              type="button"
+              onClick={deleteHandler}
+            >
+              Press Here To Delete
+            </button>
           </div>
         </div>
         <div className="new-customer__actions">

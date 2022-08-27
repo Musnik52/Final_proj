@@ -1,34 +1,48 @@
 const connectedKnex = require("../knex-connector");
 const { logger } = require("../logger");
+const { sendMsg } = require("../producer");
+const { recieveMsg } = require("../consumer");
+const uuid = require("uuid");
 
 const getAllAdmins = async (req, res) => {
   const admins = await connectedKnex("administrators").select("*");
   res.status(200).json({ admins });
 };
 
-const getAdminById = async (req, res) => {
-  const id = req.params.id;
+const getMyData = async (req, res) => {
+  const myUser = await connectedKnex("users")
+    .select("*")
+    .where("username", req.params.user)
+    .first();
   const admin = await connectedKnex("administrators")
     .select("*")
-    .where("id", id)
+    .where("user_id", myUser.id)
     .first();
   res.status(200).json({ admin });
 };
 
 const deleteAdmin = async (req, res) => {
-  const id = req.params.id;
+  const qResName = `admin ${uuid.v4()}`;
+  const myUser = await connectedKnex("users")
+    .select("*")
+    .where("username", req.params.user)
+    .first();
+  const admin = await connectedKnex("administrators")
+    .select("*")
+    .where("user_id", myUser.id)
+    .first();
   try {
-    const admin = await connectedKnex("administrators")
-      .select("*")
-      .where("id", id)
-      .first();
-    const userDel = await connectedKnex("users")
-      .where("id", admin.user_id)
-      .del();
-    const adminDel = connectedKnex("administrators").where("id", id).del();
-    res.status(200).json({ num_records_deleted: admin });
+    reqMsg = {
+      action: "deleteAdmin",
+      id: admin.id,
+      username: req.params.user,
+      password: req.body.pwd,
+      queue_name: `response ${qResName}`,
+    }
+    recieveMsg(reqMsg.queue_name, res);
+    await sendMsg("admin", reqMsg);
   } catch (e) {
-    logger.error(`failed to delete an admin. Error: ${e}`);
+    logger.error(`failed to delete admin. Error: ${e}`);
     res.status(400).send({
       status: "error",
       message: e.message,
@@ -37,17 +51,19 @@ const deleteAdmin = async (req, res) => {
 };
 
 const updateAdmin = async (req, res) => {
-  const id = req.params.id;
+  const qResName = `admin ${uuid.v4()}`;
   try {
-    admin = req.body;
-    const result = await connectedKnex("administrators")
-      .where("id", id)
-      .update(admin);
-    res.status(200).json({
-      res: "success",
-      url: `/admins/${id}`,
-      result,
-    });
+    reqMsg = {
+      action: "updateAdmin",
+      username: req.body.username,
+      password: req.body.password,
+      id: req.body.id,
+      first_name: req.body.firstName,
+      last_name: req.body.lastName,
+      queue_name: `response ${qResName}`,
+    };
+    recieveMsg(reqMsg.queue_name, res);
+    await sendMsg("admin", reqMsg);
   } catch (e) {
     logger.error(`failed to update admin. Error: ${e}`);
     res.status(400).send({
@@ -63,7 +79,7 @@ const addAdmin = async (req, res) => {
       username: req.body.username,
       password: req.body.password,
       email: req.body.email,
-      user_role: 3,
+      user_role: 3, // admin not 3
     };
     const resultUser = await connectedKnex("users").insert(user);
     const newUser = await connectedKnex("users")
@@ -220,7 +236,7 @@ module.exports = {
   getAllCustomers,
   getCustomerById,
   getAllAdmins,
-  getAdminById,
+  getMyData,
   deleteAdmin,
   updateAdmin,
   addAdmin,

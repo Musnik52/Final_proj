@@ -4,6 +4,35 @@ const { sendMsg } = require("../producer");
 const { recieveMsg } = require("../consumer");
 const uuid = require("uuid");
 
+const deleteAirline = async (req, res) => {
+  const qResName = `airline ${uuid.v4()}`;
+  const myUser = await connectedKnex("users")
+    .select("*")
+    .where("username", req.params.user)
+    .first();
+  const airline = await connectedKnex("airline_companies")
+    .select("*")
+    .where("user_id", myUser.id)
+    .first();
+  try {
+    reqMsg = {
+      action: "deleteAirline",
+      id: airline.id,
+      username: req.params.user,
+      password: req.body.pwd,
+      queue_name: `response ${qResName}`,
+    }
+    recieveMsg(reqMsg.queue_name, res);
+    await sendMsg("airline", reqMsg);
+  } catch (e) {
+    logger.error(`failed to delete airline. Error: ${e}`);
+    res.status(400).send({
+      status: "error",
+      message: e.message,
+    });
+  }
+};
+
 const updateAirline = async (req, res) => {
   const qResName = `airline ${uuid.v4()}`;
   console.log(req.body)
@@ -130,4 +159,5 @@ module.exports = {
   updateFlight,
   addFlight,
   getMyData,
+  deleteAirline,
 };

@@ -86,6 +86,32 @@ class AdministratorFacade(FacadeBase):
                 f'{UnauthorizedUserID} - Unauthorized ID to create an "airline"!')
             raise UnauthorizedUserID
 
+    def update_admin(self, admin, admin_id):
+        self.logger.logger.debug(
+            f'Attempting to update admin #{admin_id}...')
+        if not isinstance(admin_id, int):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be an integer!')
+            raise InvalidInput('Input must be an integer!')
+        elif not isinstance(admin, dict):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be an integer!')
+            raise InvalidInput('input must be a dictionary!')
+        elif self.repo.get_by_id(Administrators, admin_id) == None:
+            self.logger.logger.error(
+                f'{AdminNotFound} - Admin #{admin_id} was not found!')
+            raise AdminNotFound
+        else:
+            admin_check = self.repo.get_by_id(Administrators, admin_id)
+            if self.login_token.id != admin_check.user_id:
+                self.logger.logger.error(
+                    f'{InvalidToken} - you cannot edit other admins!')
+                raise InvalidToken
+            else:
+                self.logger.logger.info(f'Customer #{admin_id} Updated!')
+                self.repo.update_by_id(
+                    Administrators, Administrators.id, admin_id, admin)
+
     def add_customer(self, customer, user):
         self.logger.logger.debug('Setting up new customer and user...')
         if not isinstance(customer, Customers):
@@ -117,7 +143,7 @@ class AdministratorFacade(FacadeBase):
                 f'{UnauthorizedUserID} - Unauthorized ID to create a "customer"!')
             raise UnauthorizedUserID
 
-    def remove_administrator(self, administrator):
+    def remove_admin(self, administrator):
         self.logger.logger.debug(f'Attempting to remove Admin...')
         if not isinstance(administrator, int):
             raise InvalidInput('Input must be an integer!')

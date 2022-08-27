@@ -1,5 +1,6 @@
 from db_files.logger import Logger
 from tables.flights import Flights
+from tables.users import Users
 from tables.airline_companies import AirlineCompanies
 from facades.facade_base import FacadeBase
 from errors.error_invalid_time import InvalidTime
@@ -157,6 +158,26 @@ class AirlineFacade(FacadeBase):
             else:
                 self.repo.delete_by_id(Flights, Flights.id, flight_id)
                 self.logger.logger.info(f'Flight #{flight_id} Deleted!')
+
+    def remove_airline(self, airline_id):
+        self.logger.logger.debug(f'Attempting to remove airline...')
+        if not isinstance(airline_id, int):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be an integer!!')
+            raise InvalidInput('Input must be an integer!')
+        elif self.login_token.role != 'Airline':
+            raise InvalidToken
+        airline1 = self.repo.get_by_id(AirlineCompanies, airline_id)
+        if airline1 == None:
+            self.logger.logger.error(
+                f'{AirlineNotFound} - Airline #{airline_id} was not found!')
+            raise AirlineNotFound
+        else:
+            airline1_user_id = airline1.user_id
+            self.repo.delete_by_id(AirlineCompanies, AirlineCompanies.id, airline_id)
+            self.logger.logger.info(f'Airline #{airline_id} Deleted!')
+            self.repo.delete_by_id(Users, Users.id, airline1_user_id)
+            self.logger.logger.info(f'User #{airline1_user_id} Deleted!')
 
     def __str__(self):
         return f'<<Airline-Facade: {self.logger}>>\nToken ID: {self.login_token.id} Name: {self.login_token.name} Role: {self.login_token.role}'

@@ -19,7 +19,7 @@ const {
   getAllCustomers,
   getCustomerById,
   getAllAdmins,
-  getAdminById,
+  getMyData,
   deleteAdmin,
   updateAdmin,
   addAdmin,
@@ -52,7 +52,7 @@ router.route("/airlines/").get(getAllAirlines).post(addAirline);
 router.route("/customers/").get(getAllCustomers).post(addCustomer);
 router.route("/flights/").get(getAllFlights).post(addFlight);
 router.route("/users/").get(getAllUsers);
-router.route("/:id").get(getAdminById).delete(deleteAdmin).put(updateAdmin);
+router.route("/:user").get(getMyData).delete(deleteAdmin).put(updateAdmin);
 router.route("/").get(getAllAdmins).post(addAdmin);
 
 module.exports = router;

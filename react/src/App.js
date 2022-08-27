@@ -41,7 +41,6 @@ function App() {
           <Navbar
             isLoggedIn={isLoggedIn}
             onLogout={logoutHandler}
-            userType={userType}
             login_name={loggedUser}
           />
           <Switch className="App">
@@ -52,11 +51,37 @@ function App() {
               <Flights />
             </Route>
             <Route exact path="/login">
-              <Login onLogin={loginHandler} />
+              {!isLoggedIn && <Login onLogin={loginHandler} />}
+              {isLoggedIn && userType === "customer" && (
+                <CustomerProfile
+                  onLogout={logoutHandler}
+                  img={customer_bg}
+                  login_name={loggedUser}
+                  pwd={pwd}
+                />
+              )}
+              {isLoggedIn && userType === "airline" && (
+                <AirlineProfile
+                  onLogout={logoutHandler}
+                  img={airline_bg}
+                  login_name={loggedUser}
+                  pwd={pwd}
+                />
+              )}
+              {isLoggedIn && userType === "admin" && (
+                <AdminProfile
+                  onLogout={logoutHandler}
+                  img={admin_bg}
+                  login_name={loggedUser}
+                  pwd={pwd}
+                />
+              )}
             </Route>
-            <Route exact path="/signup">
-              <Signup />
-            </Route>
+            {!isLoggedIn && (
+              <Route exact path="/signup">
+                <Signup />
+              </Route>
+            )}
             <Route exact path="/contact">
               <Contact />
             </Route>
@@ -65,23 +90,6 @@ function App() {
             </Route>
             <Route exact path="/Reviews">
               <Reviews />
-            </Route>
-            <Route exact path="/customer">
-              <CustomerProfile
-                img={customer_bg}
-                login_name={loggedUser}
-                pwd={pwd}
-              />
-            </Route>
-            <Route exact path="/airline">
-              <AirlineProfile
-                img={airline_bg}
-                login_name={loggedUser}
-                pwd={pwd}
-              />
-            </Route>
-            <Route exact path="/admin">
-              <AdminProfile img={admin_bg} login_name={loggedUser} pwd={pwd} />
             </Route>
           </Switch>
         </header>

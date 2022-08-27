@@ -52,7 +52,7 @@ const AdminProfile = (props) => {
 
   return (
     <React.Fragment>
-      <Card className="">
+      <Card className="border border-primary">
         <h4 className="">Welcome, {props.login_name}</h4>
         <img src={admin_pic} alt="customer" />
         <br />
@@ -102,7 +102,13 @@ const AdminProfile = (props) => {
       {isFlights && <Flights />}
       {isCustomers && <Customers />}
       {isStatistics && <Statistics />}
-      {isUserSettings && <UserSettings />}
+      {isUserSettings && (
+        <UserSettings
+          username={props.login_name}
+          pwd={props.pwd}
+          onLogout={props.onLogout}
+        />
+      )}
     </React.Fragment>
   );
 };

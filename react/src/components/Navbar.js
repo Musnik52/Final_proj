@@ -68,7 +68,7 @@ const Navbar = (props) => {
           </ul>
           {props.isLoggedIn && (
             <button className="btn btn-outline-light btn-dark">
-              <NavLink className="nav-link active" to={`/${props.userType}`}>
+              <NavLink className="nav-link active" to="/login">
                 {`${props.login_name}'s profile`} 
               </NavLink>
             </button>

@@ -1,0 +1,12 @@
+{
+  message: '====== System startup ======',
+  level: 'debug',
+  label: 'main module',
+  timestamp: '2022-08-27T15:58:09.577Z'
+}
+{
+  message: 'Listening to http://localhost:8080',
+  level: 'info',
+  label: 'main module',
+  timestamp: '2022-08-27T15:58:11.458Z'
+}

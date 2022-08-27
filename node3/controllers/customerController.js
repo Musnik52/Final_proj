@@ -5,19 +5,27 @@ const { recieveMsg } = require("../consumer");
 const uuid = require("uuid");
 
 const deleteCustomer = async (req, res) => {
-  const id = req.params.id;
+  const qResName = `customer ${uuid.v4()}`;
+  const myUser = await connectedKnex("users")
+    .select("*")
+    .where("username", req.params.user)
+    .first();
+  const customer = await connectedKnex("customers")
+    .select("*")
+    .where("user_id", myUser.id)
+    .first();
   try {
-    const customer = await connectedKnex("customers")
-      .select("*")
-      .where("id", id)
-      .first();
-    const userDel = await connectedKnex("users")
-      .where("id", customer.user_id)
-      .del();
-    const customerDel = await connectedKnex("customers").where("id", id).del();
-    res.status(200).json({ customer_deleted: customer });
+    reqMsg = {
+      action: "deleteCustomer",
+      id: customer.id,
+      username: req.params.user,
+      password: req.body.pwd,
+      queue_name: `response ${qResName}`,
+    }
+    recieveMsg(reqMsg.queue_name, res);
+    await sendMsg("customer", reqMsg);
   } catch (e) {
-    logger.error(`failed to delete a customer. Error: ${e}`);
+    logger.error(`failed to delete customer. Error: ${e}`);
     res.status(400).send({
       status: "error",
       message: e.message,

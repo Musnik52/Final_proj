@@ -24,8 +24,13 @@ def create_all_entities():
 def mongo_insert(data):
     collection.insert_one(data)
 
+
 def mongo_delete():
     collection.delete_many({})
+
+
+def mongo_delete_one(username):
+    collection.delete_one({'username': username})
 
 
 Session = sessionmaker()

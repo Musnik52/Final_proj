@@ -27,7 +27,7 @@ const CustomerProfile = (props) => {
   };
   return (
     <React.Fragment>
-      <Card className="">
+      <Card className="border border-primary">
         <h4 className="">Welcome, {props.login_name}</h4>
         <img src={customer_pic} alt="customer" />
         <br />
@@ -55,9 +55,15 @@ const CustomerProfile = (props) => {
           </button>
         </div>
       </Card>
-      {isMyTickets && <MyTickets username={props.login_name}/>}
+      {isMyTickets && <MyTickets username={props.login_name} />}
       {isAddTicket && <NewTicket />}
-      {isUserSettings && <UserSettings username={props.login_name} pwd={props.pwd}/>}
+      {isUserSettings && (
+        <UserSettings
+          username={props.login_name}
+          pwd={props.pwd}
+          onLogout={props.onLogout}
+        />
+      )}
     </React.Fragment>
   );
 };

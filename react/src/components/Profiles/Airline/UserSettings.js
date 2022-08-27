@@ -56,6 +56,19 @@ const UserSettings = (props) => {
       })
       .catch((err) => console.log(err));
   };
+
+  const deleteHandler = (event) => {
+    axios
+      .delete(`http://localhost:8080/airlines/${props.username}`, {
+        data: { pwd: props.pwd },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+    return props.onLogout();
+  };
+
   return (
     <Card className="update">
       <h4 className="">User Settings</h4>
@@ -86,6 +99,16 @@ const UserSettings = (props) => {
                 </option>
               ))}
             </select>
+          </div>
+          <div className="new-airline__control">
+            <label className="control">Delete Profile</label>
+            <button
+              className="btn btn-danger delete_airline"
+              type="button"
+              onClick={deleteHandler}
+            >
+              Press Here To Delete
+            </button>
           </div>
         </div>
         <div className="new-airline__actions">

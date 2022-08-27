@@ -1,4 +1,5 @@
 from db_files.logger import Logger
+from tables.users import Users
 from tables.tickets import Tickets
 from tables.flights import Flights
 from tables.customers import Customers
@@ -95,6 +96,26 @@ class CustomerFacade(FacadeBase):
                                        'remaining_tickets': flight.remaining_tickets + 1})
                 self.repo.delete_by_id(Tickets, Tickets.id, ticket)
                 self.logger.logger.info(f'Ticket #{ticket} Deleted!')
+
+    def remove_customer(self, customer_id):
+        self.logger.logger.debug(f'Attempting to remove customer...')
+        if not isinstance(customer_id, int):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be an integer!!')
+            raise InvalidInput('Input must be an integer!')
+        elif self.login_token.role != 'Customer':
+            raise InvalidToken
+        customer1 = self.repo.get_by_id(Customers, customer_id)
+        if customer1 == None:
+            self.logger.logger.error(
+                f'{CustomerNotFound} - Customer #{customer_id} was not found!')
+            raise CustomerNotFound
+        else:
+            customer1_user_id = customer1.user_id
+            self.repo.delete_by_id(Customers, Customers.id, customer_id)
+            self.logger.logger.info(f'Customer #{customer_id} Deleted!')
+            self.repo.delete_by_id(Users, Users.id, customer1_user_id)
+            self.logger.logger.info(f'User #{customer1_user_id} Deleted!')
 
     def get_ticket_by_customer(self, customer):
         self.logger.logger.debug(

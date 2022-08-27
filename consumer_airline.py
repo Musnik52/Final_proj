@@ -8,7 +8,7 @@ from tables.customers import Customers
 from tables.administrators import Administrators
 from tables.airline_companies import AirlineCompanies
 from db_files.db_repo import DbRepo
-from db_files.db_config import local_session, config, mongo_insert
+from db_files.db_config import local_session, config, mongo_delete_one
 from db_files.db_rabbit_consumer import DbRabbitConsumer
 from db_files.db_rabbit_producer import DbRabbitProducer
 
@@ -33,8 +33,12 @@ def airline_callback(ch, method, properties, body):
                            "user_id": data["user_id"]}
         airline_facade.update_airline(airline_updates, airline_id)
 
-    elif data["action"] == "remove":
-        pass
+    elif data["action"] == "deleteAirline":
+        airline_facade = anonymus_facade.login(
+            data["username"], data["password"].encode('utf8'))
+        airline_id = int(data["id"])
+        airline_facade.remove_airline(airline_id)
+        mongo_delete_one(data["username"])
 
     rabbit_producer = DbRabbitProducer(data["queue_name"])
     rabbit_producer.publish(json.dumps({"status": "SUCCESS"}))

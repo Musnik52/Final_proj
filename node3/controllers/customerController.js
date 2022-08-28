@@ -21,7 +21,7 @@ const deleteCustomer = async (req, res) => {
       username: req.params.user,
       password: req.body.pwd,
       queue_name: `response ${qResName}`,
-    }
+    };
     recieveMsg(reqMsg.queue_name, res);
     await sendMsg("customer", reqMsg);
   } catch (e) {
@@ -106,9 +106,58 @@ const getMyData = async (req, res) => {
   res.status(200).json({ customer });
 };
 
+const addTicket = async (req, res) => {
+  const qResName = `customer ${uuid.v4()}`;
+  try {
+    reqMsg = {
+      action: "addTicket",
+      username: req.body.username,
+      password: req.body.password,
+      flight_id: req.body.flightId,
+      customer_id: req.body.customerId,
+      queue_name: `response ${qResName}`,
+    };
+    recieveMsg(reqMsg.queue_name, res);
+    await sendMsg("customer", reqMsg);
+  } catch (e) {
+    logger.error(`failed to add ticket. Error: ${e}`);
+    res.status(400).send({
+      status: "error",
+      message: e.message,
+    });
+  }
+};
+
+const removeTicket = async (req, res) => {
+  const myTicket = await connectedKnex("tickets")
+    .select("*")
+    .where("flight_id", req.body.ticketData.ticketId)
+    .first();
+  const qResName = `customer ${uuid.v4()}`;
+  try {
+    reqMsg = {
+      action: "removeTicket",
+      username: req.body.ticketData.username,
+      password: req.body.ticketData.password,
+      ticket_id: myTicket.id,
+      queue_name: `response ${qResName}`,
+    };
+    recieveMsg(reqMsg.queue_name, res);
+    await sendMsg("customer", reqMsg);
+  } catch (e) {
+    logger.error(`failed to remove ticket. Error: ${e}`);
+    res.status(400).send({
+      status: "error",
+      message: e.message,
+    });
+  }
+};
+
 module.exports = {
   deleteCustomer,
   updateCustomer,
   getMyTickets,
   getMyData,
+  addTicket,
+  removeTicket,
 };

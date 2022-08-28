@@ -1,5 +1,4 @@
 import React from "react";
-// import TimeFilter from "./TimeFilter";
 const TableBoard = (props) => {
   return (
     <div style={{ width: "100%", boxShadow: "3px 6px 3px #cccd" }}>

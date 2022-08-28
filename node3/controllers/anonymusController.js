@@ -152,6 +152,34 @@ const getFlightById = async (req, res) => {
   res.status(200).json({ flight });
 };
 
+const getFlightByCountries = async (req, res) => {
+  const originId = req.params.origin;
+  const destinationId = req.params.destination;
+  const flight = await connectedKnex("flights")
+    .select(
+      "flights.id",
+      "airline_companies.name as airline",
+      "c1.name as origin_country",
+      "c2.name as destination_country",
+      "flights.departure_time",
+      "flights.landing_time",
+      "flights.remaining_tickets"
+    )
+    .where("flights.origin_country_id", originId)
+    .where("flights.destination_country_id", destinationId)
+    .join("countries as c1", function () {
+      this.on("flights.origin_country_id", "=", "c1.id");
+    })
+    .join("countries as c2", function () {
+      this.on("flights.destination_country_id", "=", "c2.id");
+    })
+    .join("airline_companies", function () {
+      this.on("flights.airline_company_id", "=", "airline_companies.id");
+    })
+    .first();
+  res.status(200).json({ flight });
+};
+
 const getAllCountries = async (req, res) => {
   const countries = await connectedKnex("countries")
     .select("id", "name")
@@ -165,4 +193,5 @@ module.exports = {
   getAllFlights,
   getFlightById,
   getAllCountries,
+  getFlightByCountries,
 };

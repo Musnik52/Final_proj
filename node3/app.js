@@ -20,10 +20,10 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
+app.use("/admins", adminRoutes, requireAuth);
+app.use("/airlines", airlineRoutes, requireAuth);
+app.use("/customers", customerRoutes, requireAuth);
 app.use(anonymusRoutes);
-app.use("/admins", adminRoutes); // requireAuth
-app.use("/airlines", airlineRoutes); //requireAuth
-app.use("/customers", customerRoutes); //requireAuth
 
 // Mongodb connection
 const dbURI = config.get("mongo");
@@ -38,5 +38,5 @@ mongoose
   .catch((err) => logger.info(err));
 
 // routes
-app.get("*", checkUser);
-app.get("/", (req, res) => res.status(200).render("index"));
+app.get("*", checkUser, requireAuth);
+app.get("/", requireAuth, (req, res) => res.status(200).render("index"));

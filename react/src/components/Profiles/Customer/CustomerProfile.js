@@ -55,8 +55,14 @@ const CustomerProfile = (props) => {
           </button>
         </div>
       </Card>
-      {isMyTickets && <MyTickets username={props.login_name} />}
-      {isAddTicket && <NewTicket />}
+      {isMyTickets && <MyTickets username={props.login_name} pwd={props.pwd} />}
+      {isAddTicket && (
+        <NewTicket
+          username={props.login_name}
+          pwd={props.pwd}
+          onAddedTicket={myTicketsHandler}
+        />
+      )}
       {isUserSettings && (
         <UserSettings
           username={props.login_name}

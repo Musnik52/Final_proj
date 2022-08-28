@@ -50,7 +50,6 @@ const UserSettings = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-
     const updateData = {
       username: props.username,
       password: props.pwd,

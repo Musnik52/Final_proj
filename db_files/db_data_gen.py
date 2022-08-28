@@ -127,7 +127,8 @@ class DbDataGen(BaseDbDataGen):
                 landing_time = departure_time + \
                     timedelta(hours=random.randint(
                         2, self.max_hours_delta_t))  # min delta t is 2 hours
-                remaining_tickets = self.remaining_tickets_per_flight
+                remaining_tickets = random.randint(
+                        2, self.remaining_tickets_per_flight)
                 self.repo.add(Flights(airline_company_id=airline_company_id,
                                       origin_country_id=origin_country_id,
                                       destination_country_id=destination_country_id,

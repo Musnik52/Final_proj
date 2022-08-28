@@ -61,6 +61,19 @@ def customer_callback(ch, method, properties, body):
         customer_facade.remove_customer(customer_id)
         mongo_delete_one(data["username"])
 
+    elif data["action"] == "addTicket":
+        customer_facade = anonymus_facade.login(
+            data["username"], data["password"].encode('utf8'))
+        ticket = Tickets(flight_id=int(data["flight_id"]),
+                         customer_id=int(data["customer_id"]))
+        customer_facade.add_ticket(ticket)
+
+    elif data["action"] == "removeTicket":
+        customer_facade = anonymus_facade.login(
+            data["username"], data["password"].encode('utf8'))
+        ticket = int(data["ticket_id"])
+        customer_facade.remove_ticket(ticket)
+
     rabbit_producer = DbRabbitProducer(data["queue_name"])
     rabbit_producer.publish(json.dumps({"status": "SUCCESS"}))
 

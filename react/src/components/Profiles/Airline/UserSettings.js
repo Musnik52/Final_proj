@@ -21,13 +21,11 @@ const UserSettings = (props) => {
         setUserId(res.data.airline.user_id);
         setAirlineId(res.data.airline.id);
       });
+      axios.get(`http://localhost:8080/countries`).then((res) => {
+        setMyCountries(res.data.countries);
+      });
   }, []);
 
-  useEffect(() => {
-    axios.get(`http://localhost:8080/countries`).then((res) => {
-      setMyCountries(res.data.countries);
-    });
-  }, []);
 
   const NameChangeHandler = (event) => {
     setEnteredName(event.target.value);

@@ -4,7 +4,9 @@
 This is my final project for the 
 John-Bryce Full-Stack Develepor's 
 ceritficate requirement.
+
 ## Table of contents
+
 * [General Info](#general-info)
 * [Project's Structure](#project's-structure)
 * [Installation](#installation)
@@ -12,6 +14,7 @@ ceritficate requirement.
 
 
 ## General info
+
 This is a website where clients, airport companies
 and administrators can log-in and perform various actions, such as purchasing a flight ticket, 
 updating information, create new users, change flight info & more!
@@ -22,10 +25,11 @@ requirements & dependencies before initiating the project.
 
 ## 🧬Project's DNA 
 
-- _Back-end:_
+- _Back-end:_ 
     Most of the back-end is based on python
     and its libraries (see 'requirements.txt' file).
-    Node.js (Express) is used to set up the server and manage API requests.
+    Node.js (Express) is used to set up the server and 
+    manage API requests.
     Communication is done via microservices.
 
 - _Front-end:_
@@ -39,19 +43,33 @@ requirements & dependencies before initiating the project.
 - _Additional:_
     Micro-service: RabbitMQ
 
-## Installation
+## Installation & Configuration
 
-Install my project's node dependencies with npm command:
+1.  Install my project's node dependencies with npm command:
 ```bash
-  npm i
+  npm install
 ```
-Install Python packages, by using the following command:
+2.  Install Python packages, by using the following command:
 ```bash
   pip install -r db_files/requirements.txt
 ```
-Make sure to configure RabbitMQ microservice on your machine. 
-use the following link for assistance:
-https://www.tutlane.com/tutorial/rabbitmq/rabbitmq-installation
+3.  Make sure to configure RabbitMQ microservice on your machine. 
+    use the following link for assistance:
+    https://www.tutlane.com/tutorial/rabbitmq/rabbitmq-installation
+
+4.  The file ```db_files/config.conf``` manages default parameters.
+    Under "db", these are the configurations required:
+    ```bash
+    kv_file = Full KV file location.
+    sp_file = Full SP file location.
+    airlines_json & countries_json & users_json = Full default json files' location.
+    mongo_conn = Connection string to Mongo database.
+    conn_string = Connection string to PostGres SQL database.
+    ```
+    It is highly recomanded to adjust all configurations to the user's preference.
+
+5. The file ```node3\config\default.json```, under the section "mongo", 
+    it's required to enter a connection string to the mongo database.
 
 ## 🙏Acknowledgements & Thanks
 -   
@@ -66,6 +84,7 @@ https://www.tutlane.com/tutorial/rabbitmq/rabbitmq-installation
     pushing me not to give up & keep learning new things.
     
 ## 🚀 About Me
+
 I'm a full-stack developer 🧑‍💻 
 My stack is:
 Python 🐍, Node.js 🟢, React.js ⚛, HTML5, CSS3, JavaScript 🕸

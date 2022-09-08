@@ -8,9 +8,9 @@ ceritficate requirement.
 ## Table of contents
 
 * [General Info](#general-info)
-* [Project's Structure](#Project's-DNA)
-* [Installation](#installation-configuration)
-* [Acknoledgements](#Acknowledgements-thanks)
+* [Project's Structure](#project-dna)
+* [Installation](#installation)
+* [acknowledgements](#acknowledgements)
 
 
 ## General info
@@ -23,7 +23,7 @@ updating information, create new users, change flight info & more!
 Make sure to check and meet the 
 requirements & dependencies before initiating the project.
 
-## 🧬Project's DNA 
+## 🧬Project DNA 
 
 - _Back-end:_ 
     Most of the back-end is based on python
@@ -43,7 +43,7 @@ requirements & dependencies before initiating the project.
 - _Additional:_
     Micro-service: RabbitMQ
 
-## Installation & Configuration
+## Installation
 
 1.  Install my project's node dependencies with npm command:
 ```bash

@@ -87,6 +87,8 @@ requirements & dependencies before initiating the project.
 
 I'm a full-stack developer 🧑‍💻 
 My stack is:
+
 Python 🐍, Node.js 🟢, React.js ⚛, HTML5, CSS3, JavaScript 🕸
 SQL & NoSQL 🐘🍃, Microservices 🐰, Docker 🐳, REST APIs 🖥
+
 *Beauty is in the eye of the coder.*

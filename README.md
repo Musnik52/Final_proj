@@ -7,10 +7,10 @@ ceritficate requirement.
 
 ## Table of contents
 
-* [General Info](#general-info)
-* [Project's Structure](#project-dna)
-* [Installation](#installation)
-* [acknowledgements](#acknowledgements)
+* [General Info](##general-info)
+* [Project's Structure](##project-dna)
+* [Installation](##installation)
+* [Acknowledgements](##acknowledgements)
 
 
 ## General info

@@ -8,9 +8,9 @@ ceritficate requirement.
 ## Table of contents
 
 * [General Info](#general-info)
-* [Project's Structure](#🧬project-dna)
+* [Project's Structure](#project-dna)
 * [Installation](#installation)
-* [Acknowledgements](#🙏acknowledgements)
+* [Acknowledgements](#acknowledgements)
 
 
 ## General info
@@ -23,7 +23,7 @@ updating information, create new users, change flight info & more!
 Make sure to check and meet the 
 requirements & dependencies before initiating the project.
 
-## 🧬Project DNA
+## Project DNA
 
 - _Back-end:_ 
     Most of the back-end is based on python
@@ -71,7 +71,7 @@ requirements & dependencies before initiating the project.
 5. The file ```node3\config\default.json```, under the section "mongo", 
     it's required to enter a connection string to the mongo database.
 
-## 🙏Acknowledgements
+## Acknowledgements
 -   
     John Bryce Academy - for providing me the 
     means and opportunity to recieve the education 

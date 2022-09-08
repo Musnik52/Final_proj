@@ -8,9 +8,9 @@ ceritficate requirement.
 ## Table of contents
 
 * [General Info](#general-info)
-* [Project's Structure](#project's-structure)
-* [Installation](#installation)
-* [Acknoledgements](#acknoledgements)
+* [Project's Structure](#project's-dna)
+* [Installation](#installation-&-configuration)
+* [Acknoledgements](#acknoledgements-&-thanks)
 
 
 ## General info

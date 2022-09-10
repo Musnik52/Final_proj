@@ -21,7 +21,7 @@ const deleteAirline = async (req, res) => {
       username: req.params.user,
       password: req.body.pwd,
       queue_name: `response ${qResName}`,
-    }
+    };
     recieveMsg(reqMsg.queue_name, res);
     await sendMsg("airline", reqMsg);
   } catch (e) {
@@ -35,7 +35,6 @@ const deleteAirline = async (req, res) => {
 
 const updateAirline = async (req, res) => {
   const qResName = `airline ${uuid.v4()}`;
-  console.log(req.body)
   try {
     reqMsg = {
       action: "updateAirline",
@@ -87,13 +86,24 @@ const getMyFlights = async (req, res) => {
   res.status(200).json({ flights });
 };
 
-const deleteFlight = async (req, res) => {
-  const id = req.params.id;
+const removeFlight = async (req, res) => {
+  const myFlight = await connectedKnex("flights")
+    .select("*")
+    .where("id", req.body.flightData.id)
+    .first();
+  const qResName = `airline ${uuid.v4()}`;
   try {
-    const flights = connectedKnex("flights").where("id", id).del();
-    res.status(200).json({ num_records_deleted: flights });
+    reqMsg = {
+      action: "removeFlight",
+      username: req.body.flightData.username,
+      password: req.body.flightData.password,
+      id: myFlight.id,
+      queue_name: `response ${qResName}`,
+    };
+    recieveMsg(reqMsg.queue_name, res);
+    await sendMsg("airline", reqMsg);
   } catch (e) {
-    logger.error(`failed to delete a flight. Error: ${e}`);
+    logger.error(`failed to remove ticket. Error: ${e}`);
     res.status(400).send({
       status: "error",
       message: e.message,
@@ -102,17 +112,23 @@ const deleteFlight = async (req, res) => {
 };
 
 const updateFlight = async (req, res) => {
-  const id = req.params.id;
+  const qResName = `airline ${uuid.v4()}`;
   try {
-    flight = req.body;
-    const result = await connectedKnex("flights")
-      .where("id", id)
-      .update(flight);
-    res.status(200).json({
-      res: "success",
-      url: `/flights/${id}`,
-      result,
-    });
+    reqMsg = {
+      action: "updateFlight",
+      username: req.body.username,
+      password: req.body.password,
+      airlineId: req.body.airlineId,
+      flightId: req.body.flightId,
+      originId: req.body.originId,
+      destinationId: req.body.destinationId,
+      departurTime: req.body.departurTime,
+      landingTime: req.body.landingTime,
+      remainingTickets: req.body.remainingTickets,
+      queue_name: `response ${qResName}`,
+    };
+    recieveMsg(reqMsg.queue_name, res);
+    await sendMsg("airline", reqMsg);
   } catch (e) {
     logger.error(`failed to update flight. Error: ${e}`);
     res.status(400).send({
@@ -123,16 +139,24 @@ const updateFlight = async (req, res) => {
 };
 
 const addFlight = async (req, res) => {
+  const qResName = `airline ${uuid.v4()}`;
   try {
-    flight = req.body;
-    const result = await connectedKnex("flights").insert(flight);
-    res.status(201).json({
-      res: "success",
-      url: `/flights/${result[0]}`,
-      result,
-    });
+    reqMsg = {
+      action: "addFlight",
+      username: req.body.username,
+      password: req.body.password,
+      airlineId: req.body.airlineId,
+      originId: req.body.originId,
+      destinationId: req.body.destinationId,
+      departurTime: req.body.departurTime,
+      landingTime: req.body.landingTime,
+      remainingTickets: req.body.remainingTickets,
+      queue_name: `response ${qResName}`,
+    };
+    recieveMsg(reqMsg.queue_name, res);
+    await sendMsg("airline", reqMsg);
   } catch (e) {
-    logger.error(`failed to add a flight. Error: ${e}`);
+    logger.error(`failed to add flight. Error: ${e}`);
     res.status(400).send({
       status: "error",
       message: e.message,
@@ -150,14 +174,15 @@ const getMyData = async (req, res) => {
     .where("user_id", myUser.id)
     .first();
   res.status(200).json({ airline });
-}
+};
 
 module.exports = {
   getMyFlights,
   updateAirline,
-  deleteFlight,
+  removeFlight,
   updateFlight,
   addFlight,
   getMyData,
   deleteAirline,
+  updateFlight,
 };

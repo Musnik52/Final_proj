@@ -4,6 +4,7 @@ import NewFlight from "./NewFlight";
 import UserSettings from "./UserSettings";
 import MyFlights from "./MyFlights";
 import airline_pic from "../../../Assets/airline_pic.jpg";
+import axios from "axios";
 
 const AirlineProfile = (props) => {
   const [isMyFlights, setMyFlights] = useState(false);
@@ -25,6 +26,16 @@ const AirlineProfile = (props) => {
     setAddFlight(false);
     setUserSettings(true);
   };
+
+  const submitUpdateHandler = (updateData) =>{
+    axios
+      .put(`http://localhost:8080/airlines/${props.username}`, updateData)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  }
+
   return (
     <React.Fragment>
       <Card className="border border-primary">
@@ -55,13 +66,13 @@ const AirlineProfile = (props) => {
           </button>
         </div>
       </Card>
-      {isMyFlights && <MyFlights username={props.login_name} />}
-      {isAddFlight && <NewFlight />}
+      {isMyFlights && <MyFlights username={props.login_name} pwd={props.pwd} />}
+      {isAddFlight && <NewFlight username={props.login_name} pwd={props.pwd} />}
       {isUserSettings && (
         <UserSettings
           username={props.login_name}
           pwd={props.pwd}
-          onLogout={props.onLogout}
+          onUpdateAirline={submitUpdateHandler}
         />
       )}
     </React.Fragment>

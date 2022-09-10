@@ -27,7 +27,8 @@ const NewTicket = (props) => {
   useEffect(() => {
     axios.get(`http://localhost:8080/countries`).then((res) => {
       setMyCountries(res.data.countries);
-    });
+    })
+    .catch((err) => console.log(err));
     axios
       .get(`http://localhost:8080/customers/${props.username}`)
       .then((res) => {
@@ -45,22 +46,18 @@ const NewTicket = (props) => {
 
   const formHandler = async (event) => {
     setIsCounrtySelect(!isCounrtySelect);
-    console.log(enteredOriginCountryId);
-    console.log(enteredDestinationCountryId);
     axios
       .get(
         `http://localhost:8080/flights/${enteredOriginCountryId}/${enteredDestinationCountryId}`
       )
       .then((res) => {
-        setTicketList([res.data.flight]);
+        setTicketList(res.data.flight);
       })
       .catch((err) => console.log(err));
   };
 
   const ticketChangeHandler = (event) => {
     setMyTicket(event.target.value);
-    console.log(event.target.value);
-    console.log(myTicket);
   };
 
   const submitHandler = (event) => {
@@ -137,12 +134,19 @@ const NewTicket = (props) => {
                 Back to Country Select
               </button>
 
-              <label className="control">Enter Flight ID:</label>
-              <input
-                className="control"
-                type="text"
+              <label className="control">Select Flight ID:</label>
+              <select
+                className="form-select"
+                aria-label="Default select example"
                 onChange={ticketChangeHandler}
-              />
+              >
+                <option selected value={"0"}/>
+                {ticketList.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.id}
+                  </option>
+                ))}
+              </select>
               <Button className="control" type="submit">
                 Add Ticket
               </Button>

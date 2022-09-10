@@ -1,6 +1,7 @@
 from db_files.logger import Logger
 from facades.facade_base import FacadeBase
 from tables.users import Users
+from tables.flights import Flights
 from tables.customers import Customers
 from tables.administrators import Administrators
 from tables.airline_companies import AirlineCompanies
@@ -9,9 +10,11 @@ from errors.error_invalid_token import InvalidToken
 from errors.error_invalid_input import InvalidInput
 from errors.error_short_password import PasswordTooShort
 from errors.error_admin_not_found import AdminNotFound
+from errors.error_flight_not_found import FlightNotFound
 from errors.error_airline_not_found import AirlineNotFound
 from errors.error_customer_not_found import CustomerNotFound
 from errors.error_unauthorized_user_id import UnauthorizedUserID
+from errors.error_invalid_remaining_tickets import InvalidRemainingTickets
 
 
 class AdministratorFacade(FacadeBase):
@@ -24,6 +27,7 @@ class AdministratorFacade(FacadeBase):
         self.airline_role_number = self.config["user_roles"]["airline"]
         self.customer_role_number = self.config["user_roles"]["customer"]
         self.password_length = self.config["limits"]["password_length"]
+        self.ticket_limit = self.config["limits"]["ticket_limit"]
 
     def get_all_customers(self):
         self.logger.logger.debug(f'Attempting to fetch all customers...')
@@ -51,6 +55,9 @@ class AdministratorFacade(FacadeBase):
             raise UserAlreadyExists
         elif user.user_role == int(self.admin_role_number):
             self.create_user(user)
+            new_user = list(self.repo.get_by_column_value(
+                Users, Users.username, user.username))
+            administrator.user_id = new_user[0].id
             self.logger.logger.info(f'User {user.username} created!')
             self.repo.add(administrator)
             self.logger.logger.info(
@@ -78,6 +85,9 @@ class AdministratorFacade(FacadeBase):
             raise UserAlreadyExists
         elif user.user_role == int(self.airline_role_number):
             self.create_user(user)
+            new_user = list(self.repo.get_by_column_value(
+                Users, Users.username, user.username))
+            airline.user_id = new_user[0].id
             self.logger.logger.info(f'User {user.username} created!')
             self.repo.add(airline)
             self.logger.logger.info(f'Administrator {airline.name} created!')
@@ -111,6 +121,68 @@ class AdministratorFacade(FacadeBase):
                 self.logger.logger.info(f'Customer #{admin_id} Updated!')
                 self.repo.update_by_id(
                     Administrators, Administrators.id, admin_id, admin)
+
+    def update_flight(self, flight, flight_id):
+        self.logger.logger.debug(
+            f'Attempting to update flight #{flight_id}...')
+        if not isinstance(flight_id, int):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be an integer!')
+            raise InvalidInput('Input must be an integer!')
+        elif not isinstance(flight, dict):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be a dictionary!')
+            raise InvalidInput('Input must be a dictionary!')
+        elif self.get_flight_by_id(flight_id) == None:
+            self.logger.logger.error(
+                f'{FlightNotFound} - Flight #{flight_id} was not found!')
+            raise FlightNotFound
+        else:
+            current_tickets = self.repo.get_by_id(
+                Flights, flight_id).remaining_tickets
+            self.repo.update_by_id(Flights, Flights.id, flight_id, flight)
+            updated_tickets = self.repo.get_by_id(
+                Flights, flight_id).remaining_tickets
+            if updated_tickets < int(self.ticket_limit):
+                self.repo.update_by_id(Flights, Flights.id, flight_id, {
+                                       'remaining_tickets': current_tickets})
+                self.logger.logger.error(
+                    f'{InvalidRemainingTickets} - Negative number of seats is impossible!')
+                raise InvalidRemainingTickets
+            else:
+                if self.login_token.role != "Administrator":
+                    self.logger.logger.error(
+                        f'{InvalidToken} - Unauthorized!')
+                    raise InvalidToken
+                else:
+                    self.logger.logger.info(f'Flight updated!')
+                    print(
+                        f'{updated_tickets} remaining ticket(s) on flight #{flight_id}')
+    
+    def update_airline(self, airline, airline_id):
+        self.logger.logger.debug(
+            f'Attempting to update Airline #{airline_id}...')
+        if not isinstance(airline_id, int):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be an integer!')
+            raise InvalidInput('Input must be an integer!')
+        elif not isinstance(airline, dict):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be a dictionary!')
+            raise InvalidInput('Input must be a dictionary!')
+        elif self.get_airline_by_id(airline_id) == None:
+            self.logger.logger.error(
+                f'{AirlineNotFound} - Airline #{airline_id} was not found!')
+            raise AirlineNotFound
+        else:
+            if self.login_token.role != "Administrator":
+                self.logger.logger.error(
+                    f'{InvalidToken} - Unauthorized!')
+                raise InvalidToken
+            else:
+                self.logger.logger.info(f'Airline updated!')
+                self.repo.update_by_id(
+                    AirlineCompanies, AirlineCompanies.id, airline_id, airline)
 
     def add_customer(self, customer, user):
         self.logger.logger.debug('Setting up new customer and user...')
@@ -198,6 +270,23 @@ class AdministratorFacade(FacadeBase):
             self.logger.logger.info(f'Customer #{customer} Deleted!')
             self.repo.delete_by_id(Users, Users.id, customer1_user_id)
             self.logger.logger.info(f'User #{customer1_user_id} Deleted!')
+
+    def remove_flight(self, flight):
+        self.logger.logger.debug(f'Attempting to remove flight...')
+        if not isinstance(flight, int):
+            self.logger.logger.error(
+                f'{InvalidInput} - Input must be an integer!!')
+            raise InvalidInput('Input must be an integer!')
+        elif self.login_token.role != 'Administrator':
+            raise InvalidToken
+        flight1 = self.repo.get_by_id(Flights, flight)
+        if flight1 == None:
+            self.logger.logger.error(
+                f'{FlightNotFound} - Flight #{flight} was not found!')
+            raise FlightNotFound
+        else:
+            self.repo.delete_by_id(Flights, Flights.id, flight)
+            self.logger.logger.info(f'Flight #{flight} Deleted!')
 
     def __str__(self):
         return f'<<Administrator-Facade: {self.logger}>>\nToken ID: {self.login_token.id} Name: {self.login_token.name} Role: {self.login_token.role}'

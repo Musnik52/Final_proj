@@ -12,6 +12,9 @@ const UserSettings = (props) => {
   const [myCountries, setMyCountries] = useState([]);
 
   useEffect(() => {
+    axios.get(`http://localhost:8080/countries`).then((res) => {
+      setMyCountries(res.data.countries);
+    });
     axios
       .get(`http://localhost:8080/airlines/${props.username}`)
       .then((res) => {
@@ -21,11 +24,7 @@ const UserSettings = (props) => {
         setUserId(res.data.airline.user_id);
         setAirlineId(res.data.airline.id);
       });
-      axios.get(`http://localhost:8080/countries`).then((res) => {
-        setMyCountries(res.data.countries);
-      });
   }, []);
-
 
   const NameChangeHandler = (event) => {
     setEnteredName(event.target.value);
@@ -46,25 +45,7 @@ const UserSettings = (props) => {
       countryId: enteredCountryId,
       UserId: enteredUserId,
     };
-
-    axios
-      .put(`http://localhost:8080/airlines/${props.username}`, updateData)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const deleteHandler = (event) => {
-    axios
-      .delete(`http://localhost:8080/airlines/${props.username}`, {
-        data: { pwd: props.pwd },
-      })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
-    return props.onLogout();
+    props.onUpdateAirline(updateData);
   };
 
   return (
@@ -89,7 +70,7 @@ const UserSettings = (props) => {
               onChange={countryIdChangeHandler}
             >
               <option selected value={0}>
-                Choose a country
+                Choose a Country
               </option>
               {myCountries.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -97,16 +78,6 @@ const UserSettings = (props) => {
                 </option>
               ))}
             </select>
-          </div>
-          <div className="new-airline__control">
-            <label className="control">Delete Profile</label>
-            <button
-              className="btn btn-danger delete_airline"
-              type="button"
-              onClick={deleteHandler}
-            >
-              Press Here To Delete
-            </button>
           </div>
         </div>
         <div className="new-airline__actions">

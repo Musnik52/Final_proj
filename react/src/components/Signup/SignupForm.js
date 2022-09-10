@@ -46,7 +46,6 @@ const SignupForm = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-
     const customerData = {
       firstName: enteredFirstName,
       lastName: enteredLastName,

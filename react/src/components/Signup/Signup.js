@@ -11,7 +11,6 @@ const Signup = (props) => {
       publivId: uuid.v4(),
       user_role: "customer",
     };
-    console.log(dataCustomer);
     axios
       .post("http://localhost:8080/", dataCustomer)
       .then((res) => {

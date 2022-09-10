@@ -13,6 +13,7 @@ const CustomerProfile = (props) => {
   const myTicketsHandler = () => {
     setUserSettings(false);
     setAddTicket(false);
+    setMyTickets(false);
     setMyTickets(true);
   };
   const newTicketHandler = () => {

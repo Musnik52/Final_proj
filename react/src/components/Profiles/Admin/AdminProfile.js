@@ -98,9 +98,9 @@ const AdminProfile = (props) => {
           </button>
         </div>
       </Card>
-      {isAirlines && <Airlines />}
-      {isFlights && <Flights />}
-      {isCustomers && <Customers />}
+      {isAirlines && <Airlines username={props.login_name} pwd={props.pwd} />}
+      {isFlights && <Flights username={props.login_name} pwd={props.pwd} />}
+      {isCustomers && <Customers username={props.login_name} pwd={props.pwd} />}
       {isStatistics && <Statistics />}
       {isUserSettings && (
         <UserSettings

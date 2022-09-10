@@ -18,13 +18,11 @@ anonymus_facade = AnonymusFacade(repo, config)
 
 def airline_callback(ch, method, properties, body):
     data = json.loads(body)
-    print("#"*50)
+    print("#"*22)
     print(data)
-    print("#"*50)
-    if data["action"] == 'addFlight':
-        pass
+    print("#"*22)
 
-    elif data["action"] == "updateAirline":
+    if data["action"] == "updateAirline":
         airline_facade = anonymus_facade.login(
             data["username"], data["password"].encode('utf8'))
         airline_id = int(data["id"])
@@ -39,6 +37,33 @@ def airline_callback(ch, method, properties, body):
         airline_id = int(data["id"])
         airline_facade.remove_airline(airline_id)
         mongo_delete_one(data["username"])
+
+    elif data["action"] == "addFlight":
+        airline_facade = anonymus_facade.login(
+            data["username"], data["password"].encode('utf8'))
+        new_flight = Flights(airline_company_id=data["airlineId"],
+                             origin_country_id=data["originId"],
+                             destination_country_id=data["destinationId"],
+                             departure_time=data["departurTime"],
+                             landing_time=data["landingTime"],
+                             remaining_tickets=int(data["remainingTickets"]))
+        airline_facade.add_flight(new_flight)
+
+    elif data["action"] == "removeFlight":
+        airline_facade = anonymus_facade.login(
+            data["username"], data["password"].encode('utf8'))
+        airline_facade.remove_flight(int(data["id"]))
+
+    elif data["action"] == "updateFlight":
+        airline_facade = anonymus_facade.login(
+            data["username"], data["password"].encode('utf8'))
+        flight_data = {"airline_company_id": data["airlineId"],
+                       "origin_country_id": data["originId"],
+                       "destination_country_id": data["destinationId"],
+                       "departure_time": data["departurTime"],
+                       "landing_time": data["landingTime"],
+                       "remaining_tickets": int(data["remainingTickets"])}
+        airline_facade.update_flight(flight_data, int(data["flightId"]))
 
     rabbit_producer = DbRabbitProducer(data["queue_name"])
     rabbit_producer.publish(json.dumps({"status": "SUCCESS"}))

@@ -61,6 +61,7 @@ const MyTickets = (props) => {
               aria-label="Default select example"
               onChange={removeTicketHandler}
             >
+            <option selected value={"0"}/>
               {myTickets.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.id}

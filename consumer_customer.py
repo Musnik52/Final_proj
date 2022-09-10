@@ -18,9 +18,7 @@ anonymus_facade = AnonymusFacade(repo, config)
 
 def customer_callback(ch, method, properties, body):
     data = json.loads(body)
-    print("#"*50)
-    print(data)
-    print("#"*50)
+    
     if data["action"] == 'addCustomer':
         salt = bcrypt.gensalt()
         new_user = Users(username=data["username"],

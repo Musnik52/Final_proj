@@ -10,6 +10,7 @@ ceritficate requirement.
 * [General Info](#general-info)
 * [Project's Structure](#project-dna)
 * [Installation](#installation)
+* [Documentation](#documentation)
 * [Acknowledgements](#acknowledgements)
 
 
@@ -70,6 +71,53 @@ requirements & dependencies before initiating the project.
 
 5. The file ```node3\config\default.json```, under the section "mongo", 
     it's required to enter a connection string to the mongo database.
+    
+## Documentation
+
+### Landing page:
+Main page seen on arrival.
+The airlock logo at the top left of the nav-bar is a botton leading to this page.
+
+### Nav-bar:
+Navigation throughout the app.
+Click to reach desired action.
+
+#### Nav-bar - Flights:
+All available flights are shown here.
+Filteration by departure/landing time is possible.
+
+#### Nav-bar - Login/Sign-Up:
+For clients: Initial registration can be don by clicking the "Sign up" button.
+For airlines: Please send registration info to our email so we'll register you as our business clients.
+If you have a valid user, enter the username and password and log in to perform actions.
+
+#### Nav-bar - Misc:
+This section contains some static info and elements about Airlock.
+
+### Profile & Logout:
+Profile and logout buttons are created upon a successful login of users.
+The profile button leads back to the user's personal panel, while the logout butten logs the user out.
+
+#### Client Profile:
+Clients can perform the following actions:
+
+    1. View personal tickets booked, and remove them, if the client so wishes.
+    2. Book a new flight via searching an available flight from and to selected countries.
+    3. edit or delete user info.
+#### Airline Profile:
+Airlines (business clients) can:
+
+    1. View/edit/remove flights they operate.
+    2. Create a new flight.
+    3. edit or delete user info.
+#### Admin Profile:
+Admins control most of the system and have the power to:
+
+    1. View/add/remove/update airlines.
+    2. View/update/remove existing flights.
+    3. View/remove existing clients.
+    4. View relevant system statistics.
+    5. Edit/Remove/add admin user
 
 ## Acknowledgements
 -   

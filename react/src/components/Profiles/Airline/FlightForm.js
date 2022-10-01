@@ -47,7 +47,6 @@ const FlightForm = (props) => {
     event.preventDefault();
     const flightData = {
       username: props.username,
-      password: props.pwd,
       airlineId: enteredAirlineId,
       originId: enteredOriginCountryId,
       destinationId: enteredDestinationCountryId,

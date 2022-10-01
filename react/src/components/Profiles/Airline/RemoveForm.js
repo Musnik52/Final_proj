@@ -12,8 +12,6 @@ const NewFlight = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
     const flightData = {
-      username: props.username,
-      password: props.pwd,
       id: removeFlightId,
     };
     props.onSubmit(flightData);

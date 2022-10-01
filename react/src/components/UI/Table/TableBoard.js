@@ -4,7 +4,7 @@ const TableBoard = (props) => {
     <div style={{ width: "100%", boxShadow: "3px 6px 3px #cccd" }}>
       {props.list.length > 0 && (
         <table
-          className="table table-striped"
+          className="table"
           cellSpacing="0"
           style={{ width: "100%", heigth: "auto", padding: "5px 10px" }}
         >
@@ -15,7 +15,7 @@ const TableBoard = (props) => {
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody style={{ backgroundColor: "black", color: "white" }}>
             {Object.values(props.list).map((obj, index) => (
               <tr key={index}>
                 {Object.values(obj).map((value, index2) => (

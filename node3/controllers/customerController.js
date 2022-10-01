@@ -3,6 +3,9 @@ const { logger } = require("../logger");
 const { sendMsg } = require("../producer");
 const { recieveMsg } = require("../consumer");
 const uuid = require("uuid");
+const config = require("config");
+const sessionData = config.get("sessionData");
+const jwt = require("jsonwebtoken");
 
 const deleteCustomer = async (req, res) => {
   const qResName = `customer ${uuid.v4()}`;
@@ -18,8 +21,8 @@ const deleteCustomer = async (req, res) => {
     reqMsg = {
       action: "deleteCustomer",
       id: customer.id,
-      username: req.params.user,
-      password: req.body.pwd,
+      username: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).username,
+      password: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).password,
       queue_name: `response ${qResName}`,
     };
     recieveMsg(reqMsg.queue_name, res);
@@ -38,8 +41,8 @@ const updateCustomer = async (req, res) => {
   try {
     reqMsg = {
       action: "updateCustomer",
-      username: req.body.username,
-      password: req.body.password,
+      username: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).username,
+      password: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).password,
       id: req.body.id,
       first_name: req.body.firstName,
       last_name: req.body.lastName,
@@ -111,8 +114,8 @@ const addTicket = async (req, res) => {
   try {
     reqMsg = {
       action: "addTicket",
-      username: req.body.username,
-      password: req.body.password,
+      username: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).username,
+      password: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).password,
       flight_id: req.body.flightId,
       customer_id: req.body.customerId,
       queue_name: `response ${qResName}`,
@@ -137,11 +140,12 @@ const removeTicket = async (req, res) => {
   try {
     reqMsg = {
       action: "removeTicket",
-      username: req.body.ticketData.username,
-      password: req.body.ticketData.password,
+      username: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).username,
+      password: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).password,
       ticket_id: myTicket.id,
       queue_name: `response ${qResName}`,
     };
+    console.log(reqMsg)
     recieveMsg(reqMsg.queue_name, res);
     await sendMsg("customer", reqMsg);
   } catch (e) {

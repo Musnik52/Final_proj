@@ -20,7 +20,6 @@ const MyTickets = (props) => {
       .get(`http://localhost:8080/customers/tickets/${props.username}`)
       .then((res) => {
         setTickets(res.data.tickets);
-        console.log(res.data.tickets);
       });
   }, []);
 
@@ -31,8 +30,6 @@ const MyTickets = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
     const ticketData = {
-      username: props.username,
-      password: props.pwd,
       ticketId: removeTicketId,
     };
     axios
@@ -48,7 +45,6 @@ const MyTickets = (props) => {
   return (
     <React.Fragment>
       <div className="container">
-        <h4 className="">My Tickets</h4>
         <TableBoard list={myTickets} tableCol={colNames} />
         <Card className="">
           <form onSubmit={submitHandler}>

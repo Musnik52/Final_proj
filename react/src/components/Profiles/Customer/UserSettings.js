@@ -17,7 +17,6 @@ const UserSettings = (props) => {
     axios
       .get(`http://localhost:8080/customers/${props.username}`)
       .then((res) => {
-        console.log(res.data.customer);
         setEnteredFirstName(res.data.customer.first_name);
         setEnteredLastName(res.data.customer.last_name);
         setEnteredAddress(res.data.customer.address);
@@ -51,8 +50,6 @@ const UserSettings = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
     const updateData = {
-      username: props.username,
-      password: props.pwd,
       id: enteredCustomerId,
       firstName: enteredFirstName,
       lastName: enteredLastName,
@@ -70,7 +67,7 @@ const UserSettings = (props) => {
       .catch((err) => console.log(err));
   };
 
-  const deleteHandler = (event) => {
+  const deleteHandler = () => {
     axios
       .delete(`http://localhost:8080/customers/${props.username}`, {
         data: { pwd: props.pwd },

@@ -4,6 +4,7 @@ import NewTicket from "./NewTicket";
 import UserSettings from "./UserSettings";
 import MyTickets from "./MyTickets";
 import customer_pic from "../../../Assets/customer_pic.jpg";
+import "./CustomerProfile.css";
 
 const CustomerProfile = (props) => {
   const [isMyTickets, setMyTickets] = useState(false);
@@ -28,49 +29,46 @@ const CustomerProfile = (props) => {
   };
   return (
     <React.Fragment>
-      <Card className="border border-primary">
-        <h4 className="">Welcome, {props.login_name}</h4>
-        <img src={customer_pic} alt="customer" />
-        <br />
-        <div className="btn-group" role="group" aria-label="Basic example">
-          <button
-            onClick={myTicketsHandler}
-            type="button"
-            className="btn btn-outline-success"
-          >
-            My Tickets
-          </button>
-          <button
-            onClick={newTicketHandler}
-            type="button"
-            className="btn btn-outline-success"
-          >
-            Book a Flight
-          </button>
-          <button
-            onClick={userSettingsHandler}
-            type="button"
-            className="btn btn-outline-success"
-          >
-            User Settings
-          </button>
-        </div>
-      </Card>
-      {isMyTickets && <MyTickets username={props.login_name} pwd={props.pwd} />}
-      {isAddTicket && (
-        <NewTicket
-          username={props.login_name}
-          pwd={props.pwd}
-          onAddedTicket={myTicketsHandler}
-        />
-      )}
-      {isUserSettings && (
-        <UserSettings
-          username={props.login_name}
-          pwd={props.pwd}
-          onLogout={props.onLogout}
-        />
-      )}
+      <div className="container__im3">
+        <Card className="border border-primary">
+          <h4 className="">Welcome, {props.login_name}</h4>
+          <img src={customer_pic} alt="customer" />
+          <br />
+          <div className="btn-group" role="group" aria-label="Basic example">
+            <button
+              onClick={myTicketsHandler}
+              type="button"
+              className="btn btn-outline-success"
+            >
+              My Tickets
+            </button>
+            <button
+              onClick={newTicketHandler}
+              type="button"
+              className="btn btn-outline-success"
+            >
+              Book a Flight
+            </button>
+            <button
+              onClick={userSettingsHandler}
+              type="button"
+              className="btn btn-outline-success"
+            >
+              User Settings
+            </button>
+          </div>
+        </Card>
+        {isMyTickets && <MyTickets username={props.login_name} />}
+        {isAddTicket && (
+          <NewTicket
+            username={props.login_name}
+            onAddedTicket={myTicketsHandler}
+          />
+        )}
+        {isUserSettings && (
+          <UserSettings username={props.login_name} onLogout={props.onLogout} />
+        )}
+      </div>
     </React.Fragment>
   );
 };

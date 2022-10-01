@@ -20,9 +20,8 @@ const Signup = (props) => {
   };
 
   return (
-    <div className="mb-3">
-      <br />
-      <h3>Signup</h3>
+    <div className="container__im2">
+      <h3 className="center__headline">Signup</h3>
       <Card className="signup">
         <SignupForm onSaveCustomerData={saveCustomerDataHandler} />
       </Card>

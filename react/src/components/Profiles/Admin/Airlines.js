@@ -94,7 +94,6 @@ const Airlines = (props) => {
   return (
     <React.Fragment>
       <div className="container">
-        <h4 className="">Airlines</h4>
         {!isReturnAction && (
           <button
             className="btn btn-outline-info"

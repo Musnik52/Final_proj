@@ -19,6 +19,11 @@
     "conn_str": "mongodb+srv://admin:admin@cluster0.ougwlzb.mongodb.net/airlock-userAuth"
   },
 
+  "sessionData": {
+    "secret": "borisKing",
+    "key": "airlockSession"
+  },
+
   "ports": {
     "listening": 8080
   }

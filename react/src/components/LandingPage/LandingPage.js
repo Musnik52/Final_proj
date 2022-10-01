@@ -6,7 +6,6 @@ const LandingPage = (props) => {
     <div className="LandingPage">
       <img src={props.img} alt="Travel" className="LandingPage__image" />
       <h1 className="LandingPage__title">Airlock</h1>
-      {" "}
       <h6 className="LandingPage__title2">Run Wild, Fly Safe.</h6>
     </div>
   );

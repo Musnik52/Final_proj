@@ -80,7 +80,6 @@ const MyFlights = (props) => {
   return (
     <React.Fragment>
       <div className="container">
-        <h4 className="">My Flights</h4>
         {!isReturnAction && (
           <button
             className="btn btn-outline-info"
@@ -105,7 +104,6 @@ const MyFlights = (props) => {
             <RemoveForm
               myFlights={myFlights}
               username={props.username}
-              pwd={props.pwd}
               onSubmit={submitRemoveHandler}
             />
           )}
@@ -129,7 +127,6 @@ const MyFlights = (props) => {
               </select>
               <FlightForm
                 username={props.username}
-                pwd={props.pwd}
                 onSubmit={submitUpdateHandler}
               />
             </div>

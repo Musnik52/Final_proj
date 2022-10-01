@@ -43,7 +43,6 @@ const Customers = (props) => {
   return (
     <React.Fragment>
       <div className="container">
-        <h4 className="">Customers</h4>
         <Card className="">
           {!isRemoveAction && (
             <button className="btn btn-danger" onClick={removeActionHandler}>

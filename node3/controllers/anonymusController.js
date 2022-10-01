@@ -2,10 +2,11 @@ const connectedKnex = require("../knex-connector");
 const { logger } = require("../logger");
 const { sendMsg } = require("../producer");
 const { recieveMsg } = require("../consumer");
+const jwt = require("jsonwebtoken");
 const uuid = require("uuid");
 const User = require("../models/User");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const config = require("config");
+const sessionData = config.get("sessionData");
 
 // handle errors
 const handleErrors = (err) => {
@@ -38,10 +39,10 @@ const handleErrors = (err) => {
 };
 
 // create json web token
-const maxAge = 3 * 24 * 60 * 60;
-const createToken = (id) => {
-  return jwt.sign({ id }, "secret key", {
-    expiresIn: maxAge,
+const maxAge = 24 * 60 * 60 * 1000;
+const createToken = (id, username, user_role, password) => {
+  return jwt.sign({ id, username, user_role, password }, sessionData.secret, {
+    expiresIn: `${maxAge}s`,
   });
 };
 
@@ -49,21 +50,46 @@ const Login = async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await User.login(username, password);
-    const token = createToken(user._id);
-    await res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-    await res
+    const token = createToken(
+      user._id,
+      user.username,
+      user.user_role,
+      password
+    );
+    res.cookie("jwt_TOKEN", token, { httpOnly: true, maxAge });
+    res
       .status(200)
-      .json({ user: user.username, role: user.user_role, password: password });
+      .json({ username: user.username, user_role: user.user_role });
   } catch (err) {
     const errors = handleErrors(err);
     res.status(400).json({ errors });
   }
 };
 
-//   const logout = (req, res) => {
-//     res.cookie("jwt", "", { maxAge: 1 });
-//     res.redirect("/");
-//   };
+const LoginCheck = (req, res) => {
+  if (req.cookies.jwt_TOKEN) {
+    jwt.verify(
+      req.cookies.jwt_TOKEN,
+      sessionData.secret,
+      (err, decodedToken) => {
+        res.status(200).json({ LoggedIn: true, user: decodedToken });
+      }
+    );
+  } else {
+    res.status(200).json({ LoggedIn: false });
+  }
+};
+
+const Logout = (req, res) => {
+  try {
+    res
+      .status(200)
+      .cookie("jwt_TOKEN", "", { httpOnly: true, maxAge: 0, overwrite: true });
+  } catch (err) {
+    res.status(400).json({ err });
+  }
+  res.status(200).json({ LoggedIn: false });
+};
 
 const addCustomer = async (req, res) => {
   const qResName = `customer ${uuid.v4()}`;
@@ -172,12 +198,84 @@ const getFlightByCountries = async (req, res) => {
       this.on("flights.origin_country_id", "=", "c1.id");
     })
     .join("countries as c2", function () {
-      this.on("flights.destination_country_id", "=", "c2.id"); 
+      this.on("flights.destination_country_id", "=", "c2.id");
     })
     .join("airline_companies", function () {
       this.on("flights.airline_company_id", "=", "airline_companies.id");
     });
   res.status(200).json({ flight });
+};
+
+const getFlightByDeparture = async (req, res) => {
+  const departure = req.body.departure;
+  const nowTime = new Date();
+  const dTime = new Date(
+    nowTime.getFullYear(),
+    nowTime.getMonth(),
+    nowTime.getDate(),
+    nowTime.getHours() + Number(departure),
+    nowTime.getMinutes(),
+    nowTime.getSeconds()
+  );
+  const flights = await connectedKnex("flights")
+    .select(
+      "flights.id",
+      "airline_companies.name as airline",
+      "c1.name as origin_country",
+      "c2.name as destination_country",
+      "flights.departure_time",
+      "flights.landing_time",
+      "flights.remaining_tickets"
+    )
+    .orderBy("flights.id", "asc")
+    .where("flights.departure_time", "<", dTime)
+    .where("flights.departure_time", ">", nowTime)
+    .join("countries as c1", function () {
+      this.on("flights.origin_country_id", "=", "c1.id");
+    })
+    .join("countries as c2", function () {
+      this.on("flights.destination_country_id", "=", "c2.id");
+    })
+    .join("airline_companies", function () {
+      this.on("flights.airline_company_id", "=", "airline_companies.id");
+    });
+  res.status(200).json({ flights });
+};
+
+const getFlightByLanding = async (req, res) => {
+  const landing = req.body.landing;
+  const nowTime = new Date();
+  const lTime = new Date(
+    nowTime.getFullYear(),
+    nowTime.getMonth(),
+    nowTime.getDate(),
+    nowTime.getHours() + Number(landing),
+    nowTime.getMinutes(),
+    nowTime.getSeconds()
+  );
+  const flights = await connectedKnex("flights")
+    .select(
+      "flights.id",
+      "airline_companies.name as airline",
+      "c1.name as origin_country",
+      "c2.name as destination_country",
+      "flights.departure_time",
+      "flights.landing_time",
+      "flights.remaining_tickets"
+    )
+    .orderBy("flights.id", "asc")
+    .where("flights.landing_time", "<", lTime)
+    .where("flights.landing_time", ">", nowTime)
+    .join("countries as c1", function () {
+      this.on("flights.origin_country_id", "=", "c1.id");
+    })
+    .join("countries as c2", function () {
+      this.on("flights.destination_country_id", "=", "c2.id");
+    })
+    .join("airline_companies", function () {
+      this.on("flights.airline_company_id", "=", "airline_companies.id");
+    });
+  res.status(200).json({ flights });
 };
 
 const getAllCountries = async (req, res) => {
@@ -188,10 +286,14 @@ const getAllCountries = async (req, res) => {
 };
 
 module.exports = {
+  Logout,
   Login,
+  LoginCheck,
   addCustomer,
   getAllFlights,
   getFlightById,
   getAllCountries,
   getFlightByCountries,
+  getFlightByDeparture,
+  getFlightByLanding,
 };

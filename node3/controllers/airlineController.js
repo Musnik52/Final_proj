@@ -3,6 +3,9 @@ const { logger } = require("../logger");
 const { sendMsg } = require("../producer");
 const { recieveMsg } = require("../consumer");
 const uuid = require("uuid");
+const config = require("config");
+const sessionData = config.get("sessionData");
+const jwt = require("jsonwebtoken");
 
 const deleteAirline = async (req, res) => {
   const qResName = `airline ${uuid.v4()}`;
@@ -18,8 +21,8 @@ const deleteAirline = async (req, res) => {
     reqMsg = {
       action: "deleteAirline",
       id: airline.id,
-      username: req.params.user,
-      password: req.body.pwd,
+      username: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).username,
+      password: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).password,
       queue_name: `response ${qResName}`,
     };
     recieveMsg(reqMsg.queue_name, res);
@@ -38,8 +41,8 @@ const updateAirline = async (req, res) => {
   try {
     reqMsg = {
       action: "updateAirline",
-      username: req.body.username,
-      password: req.body.password,
+      username: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).username,
+      password: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).password,
       id: req.body.id,
       name: req.body.name,
       country_id: req.body.countryId,
@@ -95,8 +98,8 @@ const removeFlight = async (req, res) => {
   try {
     reqMsg = {
       action: "removeFlight",
-      username: req.body.flightData.username,
-      password: req.body.flightData.password,
+      username: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).username,
+      password: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).password,
       id: myFlight.id,
       queue_name: `response ${qResName}`,
     };
@@ -116,8 +119,8 @@ const updateFlight = async (req, res) => {
   try {
     reqMsg = {
       action: "updateFlight",
-      username: req.body.username,
-      password: req.body.password,
+      username: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).username,
+      password: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).password,
       airlineId: req.body.airlineId,
       flightId: req.body.flightId,
       originId: req.body.originId,
@@ -143,8 +146,8 @@ const addFlight = async (req, res) => {
   try {
     reqMsg = {
       action: "addFlight",
-      username: req.body.username,
-      password: req.body.password,
+      username: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).username,
+      password: jwt.verify(await req.cookies.jwt_TOKEN, sessionData.secret).password,
       airlineId: req.body.airlineId,
       originId: req.body.originId,
       destinationId: req.body.destinationId,

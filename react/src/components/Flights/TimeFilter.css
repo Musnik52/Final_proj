@@ -1,10 +1,10 @@
 .time-filter {
-  color: white;
-  padding: 0 1rem;
+  color: rgb(202, 6, 241);
+  padding: 0rem ;
 }
 
 .time-filter__control {
-  display: flex;
+  display: center;
   width: 100%;
   align-items: center;
   justify-content: space-between;

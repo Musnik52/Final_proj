@@ -51,8 +51,6 @@ const TicketForm = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
     const ticketData = {
-      username: props.username,
-      password: props.pwd,
       customerId: enteredCustomerId,
       flightId: myTicket,
     };

@@ -44,7 +44,7 @@ const NewTicket = (props) => {
     setEnteredDestinationCountryId(event.target.value);
   };
 
-  const formHandler = async (event) => {
+  const formHandler = async () => {
     setIsCounrtySelect(!isCounrtySelect);
     axios
       .get(
@@ -63,8 +63,6 @@ const NewTicket = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
     const ticketData = {
-      username: props.username,
-      password: props.pwd,
       customerId: enteredCustomerId,
       flightId: myTicket,
     };

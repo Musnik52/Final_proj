@@ -52,5 +52,15 @@
     align-items: center !important;
     flex-direction: row !important;
   }
+}
 
+.container__im2{
+  background-image: url("../../Assets/bg_sky.jpg");
+  padding: 3.4rem;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.center__headline {
+  color: #ffffff;
 }

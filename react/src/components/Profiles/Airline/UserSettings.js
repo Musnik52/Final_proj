@@ -18,7 +18,6 @@ const UserSettings = (props) => {
     axios
       .get(`http://localhost:8080/airlines/${props.username}`)
       .then((res) => {
-        console.log(res.data.airline);
         setEnteredName(res.data.airline.name);
         setEnteredCountryId(res.data.airline.country_id);
         setUserId(res.data.airline.user_id);
@@ -38,8 +37,6 @@ const UserSettings = (props) => {
     event.preventDefault();
 
     const updateData = {
-      username: props.username,
-      password: props.pwd,
       id: enteredAirlineId,
       name: enteredName,
       countryId: enteredCountryId,

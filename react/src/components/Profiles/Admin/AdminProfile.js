@@ -6,6 +6,7 @@ import Customers from "./Customers";
 import Statistics from "./Statistics";
 import UserSettings from "./UserSettings";
 import admin_pic from "../../../Assets/admin_pic.jpg";
+import "./AdminProfile.css"
 
 const AdminProfile = (props) => {
   const [isAirlines, setAirlines] = useState(false);
@@ -51,7 +52,7 @@ const AdminProfile = (props) => {
   };
 
   return (
-    <React.Fragment>
+    <div className="container__im5">
       <Card className="border border-primary">
         <h4 className="">Welcome, {props.login_name}</h4>
         <img src={admin_pic} alt="customer" />
@@ -109,7 +110,7 @@ const AdminProfile = (props) => {
           onLogout={props.onLogout}
         />
       )}
-    </React.Fragment>
+    </div>
   );
 };
 

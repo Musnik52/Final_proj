@@ -22,7 +22,6 @@ const NewFlight = (props) => {
         <h4 className="">New Flight</h4>
         <FlightForm
           username={props.username}
-          pwd={props.pwd}
           onSubmit={submitHandler}
         />
       </Card>

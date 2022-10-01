@@ -31,22 +31,30 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+    axios.defaults.withCredentials = true;
     axios
-      .post("http://localhost:8080/login", {
-        username: enteredUsername,
-        password: enteredPassword,
-      })
+      .post(
+        "http://localhost:8080/login",
+        {
+          username: enteredUsername,
+          password: enteredPassword,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
-        props.onLogin(res.data.user, res.data.role, res.data.password);
+        props.onLogin(res.data.username, res.data.user_role, res.data.password);
       })
       .catch((err) => console.log(err));
   };
 
   return (
     <React.Fragment>
-      <div className="container">
-        <br />
-        <h3 className="center">Login</h3>
+      <div className="container__img">
+        <h3 className="center__headline">Login</h3>
         <Card className="login">
           <form onSubmit={submitHandler}>
             <div
@@ -55,7 +63,7 @@ const Login = (props) => {
               }`}
             >
               <label className="control" htmlFor="text">
-                Username{" "}
+                Username
               </label>
               <input
                 className="control"
@@ -73,7 +81,7 @@ const Login = (props) => {
             >
               <br />
               <label className="control" htmlFor="password">
-                Password{" "}
+                Password
               </label>
               <input
                 className="control"
@@ -90,7 +98,6 @@ const Login = (props) => {
               </Button>
             </div>
             <p>
-              {" "}
               Don't have an account? <br />
               <span className="line">
                 <a href="/signup">Sign up</a>

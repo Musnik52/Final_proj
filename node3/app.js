@@ -10,7 +10,7 @@ const adminRoutes = require("./routes/adminRoutes");
 const airlineRoutes = require("./routes/airlineRoutes");
 const anonymusRoutes = require("./routes/anonymusRoutes");
 const customerRoutes = require("./routes/customerRoutes");
-const { requireAuth, checkUser } = require("./middleware/authMiddleware");
+const { requireAuth } = require("./middleware/authMiddleware");
 
 logger.debug("====== System startup ======");
 const app = express();
@@ -21,6 +21,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+// routes
 app.use(anonymusRoutes);
 app.use("/admins", requireAuth, adminRoutes);
 app.use("/airlines", requireAuth, airlineRoutes);
@@ -36,6 +37,3 @@ mongoose
     );
   })
   .catch((err) => logger.info(err));
-
-// routes
-app.get("*", checkUser);

@@ -9,7 +9,7 @@ import bp_pic from "../../Assets/bp_pic.jpg";
 
 const Reviews = (props) => {
   return (
-    <React.Fragment>
+    <div className='container__img3'>
       <br />
       <h1>Reviews</h1>
       <h3 className="text-decoration-underline">
@@ -89,8 +89,8 @@ const Reviews = (props) => {
                   Age: CLASSIFIED
                 </h4>
                 <p className="card-text">
-                  "I'm looking for Leonardo DiCaprio-...yes, it's nice, but
-                  have you seen him??"
+                  "I'm looking for Leonardo DiCaprio-...yes, it's nice, but have
+                  you seen him??"
                 </p>
                 <h4>🏃‍♂️⬅️⬅️🏃‍♂️/5</h4>
               </div>
@@ -120,7 +120,7 @@ const Reviews = (props) => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 

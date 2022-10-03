@@ -1,0 +1,13 @@
+.card2 {
+  width: 19rem;
+  max-width: 40rem;
+  max-height: 40rem;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+.container__img2 {
+  background-image: url("../../Assets/rRC37kD\ -\ Imgur.jpg");
+  padding: 260px;
+  object-fit: auto;
+}

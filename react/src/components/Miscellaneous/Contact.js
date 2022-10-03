@@ -1,13 +1,11 @@
 import React from "react";
+import Card from "../UI/Card/Card";
+import './Contact.css'
 
-const Contact = (props) => {
-  console.log(props);
-  //setTimeout(() => {
-  //props.history.push('/about')
-  //}, 3000)
+const Contact = () => {
   return (
-    <div>
-      <div className="container">
+    <div className='container__img2'>
+      <Card className="card2">
         <h4 className="center">Contact</h4>
         <p>Make A Statement!</p>
         <p>We at Airlock are always looking to impvove. </p>
@@ -22,7 +20,7 @@ const Contact = (props) => {
             Maze, pinat Mapo st, Tel-Aviv, Israel
           </address>
         </p>
-      </div>
+      </Card>
     </div>
   );
 };

@@ -10,6 +10,8 @@ ceritficate requirement.
 * [General Info](#general-info)
 * [Project's Structure](#project-dna)
 * [Installation](#installation)
+* [Initialization](#initialization)
+* [Default DB Elements](#default-db-Elements)
 * [Documentation](#documentation)
 * [Acknowledgements](#acknowledgements)
 
@@ -58,7 +60,7 @@ requirements & dependencies before initiating the project.
     use the following link for assistance:
     https://www.tutlane.com/tutorial/rabbitmq/rabbitmq-installation
 
-4.  The file ```db_files/config.conf``` manages default parameters.
+4.  The file `db_files/config.conf` manages default parameters.
     Under "db", these are the configurations required:
     ```bash
     kv_file = Full KV file location.
@@ -69,10 +71,34 @@ requirements & dependencies before initiating the project.
     ```
     It is highly recomanded to adjust all configurations to the user's preference.
 
-5. The file ```node3\config\default.json```, under the section "mongo", 
+5.  The file `node3/config/default.json`, under the section "mongo", 
     it's required to enter a connection string to the mongo database.
+
+6.  The file  `db_files/users_json.json` contains the defaule users
+    that'll be inserted to the systems DB upon initialization.
+
+## Initialization
+To populate (or reset) the database with multiple ficticious users, flights and tickets:
     
+1. Run `db_generator_producer.py` file - This'll initiate a generator where you specify
+    how many airline companies, customers, flights & tickets per customer you'd like to create.
+    After specifying the number in each option, press the big blue botton at the bottom.
+* Note that the bottom toggle is set to "Add to DB" if you want to insert additional elements.
+    If the bottom toggle is set to "Reset DB", it'll revert the DB to a setting with only
+    the default elements, as explained in #6 under the "Installation" section above.
+
+2. Run `db_generator_consumer.py` file - This'll begin the scraping for the random info
+    needed to create the requested elements.
+* Note that it's possible, due to the randomness of the scraping process, that the system
+    could be trying to assign a parameter that's considered unique & already inserted to
+    a different element. In this case, it's recommended to reset the database and try again. 
+
 ## Documentation
+
+### General Operation
+Upon performing any CRUD function with Airlock's DB, it's important to run the "consumer" files 
+(`consumer_administrator.py`, `consumer_airline.py` & `consumer_customer.py`),
+in order for the actions to get proccessed from the queue.
 
 ### Landing page:
 Main page seen on arrival.

@@ -65,7 +65,7 @@ requirements & dependencies before initiating the project.
     ```bash
     kv_file = Full KV file location.
     sp_file = Full SP file location.
-    airlines_json & countries_json & users_json = Full default json files' location.
+    airlines_json & countries_json & users_json = Full default json files location.
     mongo_conn = Connection string to Mongo database.
     conn_string = Connection string to PostGres SQL database.
     ```
